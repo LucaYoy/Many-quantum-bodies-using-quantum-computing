@@ -1,4 +1,5 @@
 \documentclass{physics_article}
+\usepackage{physics}
 \mytitle{Literature Review on Many-Body Ground States via Quantum Circuits }
 \myname{Luca Petru Ion}
 \studentid{20177336}
@@ -9,5 +10,25 @@
 	\tableofcontents
 
 	\section{Introduction \label{intro}}
-	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution, it has opened the scene for quantum information. In this project we are interested in approximating many-body quantum systems ground states using quantum computation. Moreover, we are going to compare the quantum algorithm to the classical ones and study its limitations and strengths. We will first  
+	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution, it has opened the scene for quantum information. In this project we are interested in approximating many-body quantum systems ground states using quantum computation. Moreover, we are going to compare the quantum algorithm to the classical ones and study its limitations and strengths. 
+
+	In this article We will start with an overview of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
+
+	\section{The mathematics of quantum information}
+	Any quantum system is described by a state $\ket{\psi} \in \mathcal{H}$ in a Hilbert space $\mathcal{H}$. In quantum information we are usually interested in $\mathbb{C}^2$ with basis vectors ${\ket{0},\ket{1}}$, which are the eigenstates of $\sigma_z$ Pauli matrix. For convenience below are the three Pauli matrices
+	\begin{align}
+		 \sigma_x &= \begin{pmatrix}
+		 	0&1\\
+		 	1&0
+		 \end{pmatrix}\\
+		 \sigma_y &= \begin{pmatrix}
+		 	0&-i\\
+		 	i&0
+		 \end{pmatrix}\\
+		 \sigma_z &= \begin{pmatrix}
+		 	1&0\\
+		 	0&-1
+		 \end{pmatrix}
+	 \end{align}
+
 \end{document}

@@ -1,6 +1,6 @@
 \LoadClass[a4paper,11pt]{article}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{physics_article_B}[18/05/15 - Article class for reports written by Nottingham Physics students, without biblatex]
+\ProvidesClass{physics_article}[18/05/15 - Article class for reports written by Nottingham Physics students, without biblatex]
 
 \RequirePackage{fancyhdr}
 % this package is used to provide and populate the header and footer
