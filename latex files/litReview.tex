@@ -1,5 +1,6 @@
 \documentclass{physics_article}
 \usepackage{physics}
+\usepackage{bm}
 \mytitle{Literature Review on Many-Body Ground States via Quantum Circuits }
 \myname{Luca Petru Ion}
 \studentid{20177336}
@@ -15,20 +16,39 @@
 	In this article We will start with an overview of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
 
 	\section{The mathematics of quantum information}
-	Any quantum system is described by a state $\ket{\psi} \in \mathcal{H}$ in a Hilbert space $\mathcal{H}$. In quantum information we are usually interested in $\mathbb{C}^2$ with basis vectors ${\ket{0},\ket{1}}$, which are the eigenstates of $\sigma_z$ Pauli matrix. For convenience below are the three Pauli matrices
+	\subsection{The Hilbert space}
+	Any quantum system is described by a state $\ket{\psi} \in \mathcal{H}$ in a Hilbert space $\mathcal{H}$. In quantum information we are usually interested in $\mathbb{C}^2$ with basis vectors ${\ket{0},\ket{1}}$, which are the eigenstates of $\sigma_z$ Pauli matrix. For convenience below are the three Pauli matrices written in the above basis.
 	\begin{align}
-		 \sigma_x &= \begin{pmatrix}
-		 	0&1\\
-		 	1&0
-		 \end{pmatrix}\\
-		 \sigma_y &= \begin{pmatrix}
-		 	0&-i\\
-		 	i&0
-		 \end{pmatrix}\\
-		 \sigma_z &= \begin{pmatrix}
-		 	1&0\\
-		 	0&-1
-		 \end{pmatrix}
-	 \end{align}
+	\sigma_x &= \begin{pmatrix}
+	 	0&1\\
+	 	1&0
+	 \end{pmatrix}\\
+	 \sigma_y &= \begin{pmatrix}
+	 	0&-i\\
+	 	i&0
+	 \end{pmatrix}\\
+	 \sigma_z &= \begin{pmatrix}
+	 	1&0\\
+	 	0&-1
+	 \end{pmatrix}
+ 	\end{align}
+ 	we shall not discuss here from what physical scenario this Hilbert space emerges as there are numerous options. The Pauli matrices are, for example, associated to the spin angular momentum operator describing the spin, in the three directions $x,y,z$, of spin $\frac{1}{2}$ particles\cite{nielsen_chuang_2021}.
 
+ 	\subsection{Qubits and Bloch representation}
+ 	A qubit is simply a state in our Hilbert space thus
+ 	\begin{equation}
+ 		\ket{\psi} = a\ket{0} + b\ket{1}
+ 	\end{equation}
+ 	where $|a|^2+|b|^2 = 1$ due to normalisation condition.
+
+ 	We can represent the above state using the Bloch representation\cite{nielsen_chuang_2021} by writing the state as
+ 	\begin{equation}
+ 		\ket{\psi} = \cos\left(\frac{\theta}{2}\right)\ket{0} + e^{i\phi}\sin\left(\frac{\theta}{2}\right)\ket{1}
+ 	\end{equation}
+ 	We can now associate a vector $\bm{r} = (1,\theta,\phi)\in\mathbb{R}^3$ ,in spherical polar coordinates, to this state to visualise it. The above \emph{Bloch vector} points on the unit ball.
+
+
+
+ 	\bibliography{refs}
+ 	\bibliographystyle{plain}
 \end{document}
