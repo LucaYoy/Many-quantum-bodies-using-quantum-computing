@@ -1,6 +1,7 @@
 \documentclass{physics_article}
 \usepackage{physics}
 \usepackage{bm}
+\usepackage{cite}
 \mytitle{Literature Review on Many-Body Ground States via Quantum Circuits }
 \myname{Luca Petru Ion}
 \studentid{20177336}
@@ -11,9 +12,9 @@
 	\tableofcontents
 
 	\section{Introduction \label{intro}}
-	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution, it has opened the scene for quantum information. In this project we are interested in approximating many-body quantum systems ground states using quantum computation. Moreover, we are going to compare the quantum algorithm to the classical ones and study its limitations and strengths. 
+	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution \cite{https://doi.org/10.48550/arxiv.quant-ph/0206091}, it has opened the scene for quantum information and quantum computing. The NISQ era \cite{Preskill2018quantumcomputingin} presents us with many new technologies and practices like quantum cryptography \cite{bernstein_buchmann_dahmen_2009} and quantum deep learning \cite{https://doi.org/10.48550/arxiv.1711.02038}. In order to run,test and develop new quantum technologies and algorithms one must first have a realisation of a quantum computer. Many proposals, using different physical systems, have been provided: qubits via superconducting materials \cite{PhysRevLett.85.2208, nakamura_pashkin_tsai_1999}, quantum computation using Rydberg atoms \cite{PhysRevLett.74.4091,PhysRevLett.75.4714}  In this project we are interested in approximating many-body quantum systems ground states using quantum computation and quantum circuits. Moreover, we are going to compare the quantum algorithm to the classical ones and study its limitations and strengths. 
 
-	In this article We will start with an overview of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
+	In this article We will start with an overview{} of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
 
 	\section{The mathematics of quantum information}
 	\subsection{The Hilbert space}
@@ -50,5 +51,5 @@
 
 
  	\bibliography{refs}
- 	\bibliographystyle{plain}
+ 	\bibliographystyle{unsrt}
 \end{document}

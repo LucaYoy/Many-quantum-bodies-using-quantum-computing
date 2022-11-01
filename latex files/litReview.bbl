@@ -1,5 +1,44 @@
 \begin{thebibliography}{1}
 
+\bibitem{https://doi.org/10.48550/arxiv.quant-ph/0206091}
+Jonathan~P. Dowling and Gerard~J. Milburn.
+\newblock Quantum technology: The second quantum revolution, 2002.
+
+\bibitem{Preskill2018quantumcomputingin}
+John Preskill.
+\newblock Quantum {C}omputing in the {NISQ} era and beyond.
+\newblock {\em {Quantum}}, 2:79, August 2018.
+
+\bibitem{bernstein_buchmann_dahmen_2009}
+Daniel~J. Bernstein, Johannes Buchmann, and Erik Dahmén.
+\newblock {\em Post-quantum cryptography}.
+\newblock Springer, 2009.
+
+\bibitem{https://doi.org/10.48550/arxiv.1711.02038}
+Xun Gao, Zhengyu Zhang, and Luming Duan.
+\newblock An efficient quantum algorithm for generative machine learning, 2017.
+
+\bibitem{PhysRevLett.85.2208}
+D.~Jaksch, J.~I. Cirac, P.~Zoller, S.~L. Rolston, R.~C\^ot\'e, and M.~D. Lukin.
+\newblock Fast quantum gates for neutral atoms.
+\newblock {\em Phys. Rev. Lett.}, 85:2208--2211, Sep 2000.
+
+\bibitem{nakamura_pashkin_tsai_1999}
+Y.~Nakamura, Yu.~A. Pashkin, and J.~S. Tsai.
+\newblock Coherent control of macroscopic quantum states in a
+  single-cooper-pair box.
+\newblock {\em Nature}, 398(6730):786–788, 1999.
+
+\bibitem{PhysRevLett.74.4091}
+J.~I. Cirac and P.~Zoller.
+\newblock Quantum computations with cold trapped ions.
+\newblock {\em Phys. Rev. Lett.}, 74:4091--4094, May 1995.
+
+\bibitem{PhysRevLett.75.4714}
+C.~Monroe, D.~M. Meekhof, B.~E. King, W.~M. Itano, and D.~J. Wineland.
+\newblock Demonstration of a fundamental quantum logic gate.
+\newblock {\em Phys. Rev. Lett.}, 75:4714--4717, Dec 1995.
+
 \bibitem{nielsen_chuang_2021}
 Michael~A. Nielsen and Isaac~L. Chuang.
 \newblock {\em Quantum Computation and Quantum Information}.
