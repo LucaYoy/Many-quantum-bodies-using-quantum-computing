@@ -3,44 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: litReview.aux
 The style file: unsrt.bst
 Database file #1: refs.bib
-You've used 9 entries,
+Warning--empty journal in https://doi.org/10.48550/arxiv.quant-ph/0608197
+You've used 20 entries,
             1791 wiz_defined-function locations,
-            504 strings with 5013 characters,
-and the built_in function-call counts, 1921 in all, are:
-= -- 158
-> -- 98
+            576 strings with 7470 characters,
+and the built_in function-call counts, 4913 in all, are:
+= -- 367
+> -- 317
 < -- 0
-+ -- 36
-- -- 27
-* -- 133
-:= -- 314
-add.period$ -- 25
-call.type$ -- 9
-change.case$ -- 7
++ -- 114
+- -- 94
+* -- 416
+:= -- 835
+add.period$ -- 57
+call.type$ -- 20
+change.case$ -- 19
 chr.to.int$ -- 0
-cite$ -- 9
-duplicate$ -- 75
-empty$ -- 194
-format.name$ -- 27
-if$ -- 417
+cite$ -- 21
+duplicate$ -- 167
+empty$ -- 449
+format.name$ -- 94
+if$ -- 1032
 int.to.chr$ -- 0
-int.to.str$ -- 9
-missing$ -- 9
-newline$ -- 46
-num.names$ -- 9
-pop$ -- 33
+int.to.str$ -- 20
+missing$ -- 18
+newline$ -- 100
+num.names$ -- 20
+pop$ -- 48
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 30
+skip$ -- 64
 stack$ -- 0
-substring$ -- 126
-swap$ -- 9
+substring$ -- 351
+swap$ -- 19
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 17
-width$ -- 10
-write$ -- 93
+warning$ -- 1
+while$ -- 37
+width$ -- 22
+write$ -- 210
+(There was 1 warning)

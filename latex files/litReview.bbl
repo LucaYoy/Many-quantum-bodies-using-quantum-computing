@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{https://doi.org/10.48550/arxiv.quant-ph/0206091}
 Jonathan~P. Dowling and Gerard~J. Milburn.
@@ -39,9 +39,74 @@ C.~Monroe, D.~M. Meekhof, B.~E. King, W.~M. Itano, and D.~J. Wineland.
 \newblock Demonstration of a fundamental quantum logic gate.
 \newblock {\em Phys. Rev. Lett.}, 75:4714--4717, Dec 1995.
 
-\bibitem{nielsen_chuang_2021}
-Michael~A. Nielsen and Isaac~L. Chuang.
-\newblock {\em Quantum Computation and Quantum Information}.
-\newblock Cambridge University Press, 2021.
+\bibitem{knill_laflamme_milburn_2001}
+E.~Knill, R.~Laflamme, and G.~J. Milburn.
+\newblock A scheme for efficient quantum computation with linear optics.
+\newblock {\em Nature}, 409(6816):46–52, 2001.
+
+\bibitem{doi:10.1126/science.abe8770}
+Han-Sen Zhong, Hui Wang, Yu-Hao Deng, Ming-Cheng Chen, Li-Chao Peng, Yi-Han
+  Luo, Jian Qin, Dian Wu, Xing Ding, Yi~Hu, Peng Hu, Xiao-Yan Yang, Wei-Jun
+  Zhang, Hao Li, Yuxuan Li, Xiao Jiang, Lin Gan, Guangwen Yang, Lixing You,
+  Zhen Wang, Li~Li, Nai-Le Liu, Chao-Yang Lu, and Jian-Wei Pan.
+\newblock Quantum computational advantage using photons.
+\newblock {\em Science}, 370(6523):1460--1463, 2020.
+
+\bibitem{kane_1998}
+B.~E. Kane.
+\newblock A silicon-based nuclear spin quantum computer.
+\newblock {\em Nature}, 393(6681):133–137, 1998.
+
+\bibitem{madzik_asaad_youssry_joecker_rudinger_nielsen_young_proctor_baczewski_laucht_et}
+Mateusz~T. Mądzik, Serwan Asaad, Akram Youssry, Benjamin Joecker, Kenneth~M.
+  Rudinger, Erik Nielsen, Kevin~C. Young, Timothy~J. Proctor, Andrew~D.
+  Baczewski, Arne Laucht, and et~al.
+\newblock Precision tomography of a three-qubit donor quantum processor in
+  silicon.
+\newblock {\em Nature}, 601(7893):348–353, 2022.
+
+\bibitem{kandala_mezzacapo_temme_takita_brink_chow_gambetta_2017}
+Abhinav Kandala, Antonio Mezzacapo, Kristan Temme, Maika Takita, Markus Brink,
+  Jerry~M. Chow, and Jay~M. Gambetta.
+\newblock Hardware-efficient variational quantum eigensolver for small
+  molecules and quantum magnets.
+\newblock {\em Nature}, 549(7671):242–246, 2017.
+
+\bibitem{peruzzo_mcclean_shadbolt_yung_zhou_love_aspuru-guzik_obrien_2014}
+Alberto Peruzzo, Jarrod McClean, Peter Shadbolt, Man-Hong Yung, Xiao-Qi Zhou,
+  Peter~J. Love, Alán Aspuru-Guzik, and Jeremy~L. O’Brien.
+\newblock A variational eigenvalue solver on a photonic quantum processor.
+\newblock {\em Nature Communications}, 5(1), 2014.
+
+\bibitem{https://doi.org/10.48550/arxiv.1411.4028}
+Edward Farhi, Jeffrey Goldstone, and Sam Gutmann.
+\newblock A quantum approximate optimization algorithm, 2014.
+
+\bibitem{PhysRevX.10.021067}
+Leo Zhou, Sheng-Tao Wang, Soonwon Choi, Hannes Pichler, and Mikhail~D. Lukin.
+\newblock Quantum approximate optimization algorithm: Performance, mechanism,
+  and implementation on near-term devices.
+\newblock {\em Phys. Rev. X}, 10:021067, Jun 2020.
+
+\bibitem{schollwock_2005}
+U.~Schollwöck.
+\newblock The density-matrix renormalization group.
+\newblock {\em Reviews of Modern Physics}, 77(1):259–315, 2005.
+
+\bibitem{hallberg_2006}
+Karen~A. Hallberg.
+\newblock New trends in density matrix renormalization.
+\newblock {\em Advances in Physics}, 55(5-6):477–526, 2006.
+
+\bibitem{https://doi.org/10.48550/arxiv.quant-ph/0608197}
+D.~Perez-Garcia, F.~Verstraete, M.~M. Wolf, and J.~I. Cirac.
+\newblock Matrix product state representations.
+\newblock 2006.
+
+\bibitem{schollwock_2011}
+Ulrich Schollwöck.
+\newblock The density-matrix renormalization group in the age of matrix product
+  states.
+\newblock {\em Annals of Physics}, 326(1):96–192, 2011.
 
 \end{thebibliography}

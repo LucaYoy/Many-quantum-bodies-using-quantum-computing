@@ -1,4 +1,6 @@
 \documentclass{physics_article}
+\usepackage[T1]{fontenc}
+\usepackage{comment}
 \usepackage{physics}
 \usepackage{bm}
 \usepackage{cite}
@@ -12,43 +14,47 @@
 	\tableofcontents
 
 	\section{Introduction \label{intro}}
-	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution \cite{https://doi.org/10.48550/arxiv.quant-ph/0206091}, it has opened the scene for quantum information and quantum computing. The NISQ era \cite{Preskill2018quantumcomputingin} presents us with many new technologies and practices like quantum cryptography \cite{bernstein_buchmann_dahmen_2009} and quantum deep learning \cite{https://doi.org/10.48550/arxiv.1711.02038}. In order to run,test and develop new quantum technologies and algorithms one must first have a realisation of a quantum computer. Many proposals, using different physical systems, have been provided: qubits via superconducting materials \cite{PhysRevLett.85.2208, nakamura_pashkin_tsai_1999}, quantum computation using Rydberg atoms \cite{PhysRevLett.74.4091,PhysRevLett.75.4714}  In this project we are interested in approximating many-body quantum systems ground states using quantum computation and quantum circuits. Moreover, we are going to compare the quantum algorithm to the classical ones and study its limitations and strengths. 
+	Quantum mechanics has not only revolutionized science and how we think of nature, but more recently ,in the second quantum revolution \cite{https://doi.org/10.48550/arxiv.quant-ph/0206091}, it has opened the scene for quantum information and quantum computing. The NISQ era \cite{Preskill2018quantumcomputingin} presents us with many new technologies and practices like quantum cryptography \cite{bernstein_buchmann_dahmen_2009} and quantum deep learning \cite{https://doi.org/10.48550/arxiv.1711.02038}. In order to run,test and develop new quantum technologies and algorithms one must first have a realisation of a quantum computer. Many proposals, using different physical systems, have been provided: qubits via superconducting materials \cite{PhysRevLett.85.2208, nakamura_pashkin_tsai_1999}, quantum computation using Rydberg atoms \cite{PhysRevLett.74.4091,PhysRevLett.75.4714}, photonic quantum computing \cite{knill_laflamme_milburn_2001,doi:10.1126/science.abe8770} and silicon based quantum computers \cite{kane_1998,madzik_asaad_youssry_joecker_rudinger_nielsen_young_proctor_baczewski_laucht_et}.
 
-	In this article We will start with an overview{} of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
+	With all these emerging technologies, optimization problems and multi-body quantum systems are a topic of great interest. The Variational quantum eigensolver (VQE) was used by IBM to find the ground state energy of molecules in  quantum chemistry \cite{kandala_mezzacapo_temme_takita_brink_chow_gambetta_2017} and it was also implemented on a photonic quantum processing unit \cite{peruzzo_mcclean_shadbolt_yung_zhou_love_aspuru-guzik_obrien_2014} to solve problems involving large systems of molecules. Other algorithms suited for different purposes are: the QAOA (quantum approximate optimization algorithm) which was used to produce approximate solutions to combinatorial optimization problems \cite{https://doi.org/10.48550/arxiv.1411.4028} and found to outperform other methods \cite{PhysRevX.10.021067}, the DMRG (density-matrix renormalization group) which is one of the most powerful algorithms for studying one dimensional quantum lattices \cite{schollwock_2005,hallberg_2006}. It turns out that DMRG can be linked to MPS (matrix product states) formalism \cite{https://doi.org/10.48550/arxiv.quant-ph/0608197}, a powerful way of rewriting a quantum state in a multi multi body system, in fact DMRG can be formulated in the language of MPS as studied extensively in this article \cite{schollwock_2011}. In the recent years a lot of research was made concerning the above, and many other quantum algorithms. Most of these methods give performance speed-ups compared to competing classical methods solving the same problem; in the case of multi-body quantum systems studies this is due to the fact that quantum circuits that run on quantum computers, deal with a lot of entanglement fairly easily which is profitable for solving such systems numerically, whereas ,classically, a high amount of entanglement makes the classical methods struggle. On the contrary, not much is yet known on the limitations of the quantum algorithms via quantum circuits. Since the quantum algorithms solve the same problems as their classical counterparts and both these depend on the same number of parameters we have to assume that the quantum algorithms have certain limitations as well. In the case of multi-body systems, entanglement is the limitation for the classical methods, however entanglement is effectively unlimited in the quantum methods, thus it means some other property must carry the limitations.  
 
-	\section{The mathematics of quantum information}
-	\subsection{The Hilbert space}
-	Any quantum system is described by a state $\ket{\psi} \in \mathcal{H}$ in a Hilbert space $\mathcal{H}$. In quantum information we are usually interested in $\mathbb{C}^2$ with basis vectors ${\ket{0},\ket{1}}$, which are the eigenstates of $\sigma_z$ Pauli matrix. For convenience below are the three Pauli matrices written in the above basis.
-	\begin{align}
-	\sigma_x &= \begin{pmatrix}
-	 	0&1\\
-	 	1&0
-	 \end{pmatrix}\\
-	 \sigma_y &= \begin{pmatrix}
-	 	0&-i\\
-	 	i&0
-	 \end{pmatrix}\\
-	 \sigma_z &= \begin{pmatrix}
-	 	1&0\\
-	 	0&-1
-	 \end{pmatrix}
- 	\end{align}
- 	we shall not discuss here from what physical scenario this Hilbert space emerges as there are numerous options. The Pauli matrices are, for example, associated to the spin angular momentum operator describing the spin, in the three directions $x,y,z$, of spin $\frac{1}{2}$ particles\cite{nielsen_chuang_2021}.
+	As hinted in the above paragraphs, our interest lies in solving multi-body quantum systems. We seek to analyse these systems by first solving the eigenvalue problem for certain Hamiltonians and looking at the ground state energies, we will first do this via brute force and classical methods and then model certain quantum circuits and use quantum algorithms to solve the same problem. We will then solve an optimization problem
 
- 	\subsection{Qubits and Bloch representation}
- 	A qubit is simply a state in our Hilbert space thus
- 	\begin{equation}
- 		\ket{\psi} = a\ket{0} + b\ket{1}
- 	\end{equation}
- 	where $|a|^2+|b|^2 = 1$ due to normalisation condition.
+	\begin{comment}
+		In this article We will start with an overview{} of the relevant quantum mechanical techniques and mathematics which forms the basis of the project, we will then follow up with a description of the computational software and techniques that will be used, and finally we will discuss some of the work already done in the field.
 
- 	We can represent the above state using the Bloch representation\cite{nielsen_chuang_2021} by writing the state as
- 	\begin{equation}
- 		\ket{\psi} = \cos\left(\frac{\theta}{2}\right)\ket{0} + e^{i\phi}\sin\left(\frac{\theta}{2}\right)\ket{1}
- 	\end{equation}
- 	We can now associate a vector $\bm{r} = (1,\theta,\phi)\in\mathbb{R}^3$ ,in spherical polar coordinates, to this state to visualise it. The above \emph{Bloch vector} points on the unit ball.
+		\section{The mathematics of quantum information}
+		\subsection{The Hilbert space}
+		Any quantum system is described by a state $\ket{\psi} \in \mathcal{H}$ in a Hilbert space $\mathcal{H}$. In quantum information we are usually interested in $\mathbb{C}^2$ with basis vectors ${\ket{0},\ket{1}}$, which are the eigenstates of $\sigma_z$ Pauli matrix. For convenience below are the three Pauli matrices written in the above basis.
+		\begin{align}
+		\sigma_x &= \begin{pmatrix}
+		 	0&1\\
+		 	1&0
+		 \end{pmatrix}\\
+		 \sigma_y &= \begin{pmatrix}
+		 	0&-i\\
+		 	i&0
+		 \end{pmatrix}\\
+		 \sigma_z &= \begin{pmatrix}
+		 	1&0\\
+		 	0&-1
+		 \end{pmatrix}
+	 	\end{align}
+	 	we shall not discuss here from what physical scenario this Hilbert space emerges as there are numerous options. The Pauli matrices are, for example, associated to the spin angular momentum operator describing the spin, in the three directions $x,y,z$, of spin $\frac{1}{2}$ particles\cite{nielsen_chuang_2021}.
 
+	 	\subsection{Qubits and Bloch representation}
+	 	A qubit is simply a state in our Hilbert space thus
+	 	\begin{equation}
+	 		\ket{\psi} = a\ket{0} + b\ket{1}
+	 	\end{equation}
+	 	where $|a|^2+|b|^2 = 1$ due to normalisation condition.
 
+	 	We can represent the above state using the Bloch representation\cite{nielsen_chuang_2021} by writing the state as
+	 	\begin{equation}
+	 		\ket{\psi} = \cos\left(\frac{\theta}{2}\right)\ket{0} + e^{i\phi}\sin\left(\frac{\theta}{2}\right)\ket{1}
+	 	\end{equation}
+	 	We can now associate a vector $\bm{r} = (1,\theta,\phi)\in\mathbb{R}^3$ ,in spherical polar coordinates, to this state to visualise it. The above \emph{Bloch vector} points on the unit ball.
+	\end{comment}
 
  	\bibliography{refs}
  	\bibliographystyle{unsrt}
