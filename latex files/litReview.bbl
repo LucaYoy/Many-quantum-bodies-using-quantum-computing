@@ -109,4 +109,20 @@ Ulrich Schollwöck.
   states.
 \newblock {\em Annals of Physics}, 326(1):96–192, 2011.
 
+\bibitem{PhysRevResearch.4.L022020}
+Adam Smith, Bernhard Jobst, Andrew~G. Green, and Frank Pollmann.
+\newblock Crossing a topological phase transition with a quantum computer.
+\newblock {\em Phys. Rev. Research}, 4:L022020, Apr 2022.
+
+\bibitem{PRXQuantum.2.010342}
+Sheng-Hsuan Lin, Rohit Dilip, Andrew~G. Green, Adam Smith, and Frank Pollmann.
+\newblock Real- and imaginary-time evolution with compressed quantum circuits.
+\newblock {\em PRX Quantum}, 2:010342, Mar 2021.
+
+\bibitem{PhysRevResearch.4.033118}
+Bernhard Jobst, Adam Smith, and Frank Pollmann.
+\newblock Finite-depth scaling of infinite quantum circuits for quantum
+  critical points.
+\newblock {\em Phys. Rev. Research}, 4:033118, Aug 2022.
+
 \end{thebibliography}
