@@ -4,45 +4,45 @@ The top-level auxiliary file: litReview.aux
 The style file: unsrt.bst
 Database file #1: refs.bib
 Warning--empty journal in https://doi.org/10.48550/arxiv.quant-ph/0608197
-You've used 24 entries,
+You've used 29 entries,
             1791 wiz_defined-function locations,
-            606 strings with 8215 characters,
-and the built_in function-call counts, 5872 in all, are:
-= -- 446
-> -- 363
-< -- 0
-+ -- 131
-- -- 107
-* -- 498
-:= -- 994
-add.period$ -- 69
-call.type$ -- 24
-change.case$ -- 23
+            634 strings with 9110 characters,
+and the built_in function-call counts, 6814 in all, are:
+= -- 521
+> -- 413
+< -- 1
++ -- 150
+- -- 121
+* -- 560
+:= -- 1159
+add.period$ -- 84
+call.type$ -- 29
+change.case$ -- 28
 chr.to.int$ -- 0
-cite$ -- 25
-duplicate$ -- 203
-empty$ -- 542
-format.name$ -- 107
-if$ -- 1237
+cite$ -- 30
+duplicate$ -- 248
+empty$ -- 630
+format.name$ -- 121
+if$ -- 1442
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 22
-newline$ -- 120
-num.names$ -- 24
-pop$ -- 52
+int.to.str$ -- 29
+missing$ -- 27
+newline$ -- 145
+num.names$ -- 29
+pop$ -- 60
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 76
+skip$ -- 97
 stack$ -- 0
-substring$ -- 435
-swap$ -- 23
-text.length$ -- 0
+substring$ -- 464
+swap$ -- 31
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 45
-width$ -- 26
-write$ -- 254
+while$ -- 52
+width$ -- 31
+write$ -- 309
 (There was 1 warning)

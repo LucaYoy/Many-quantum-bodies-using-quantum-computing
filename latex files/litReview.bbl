@@ -71,6 +71,39 @@ Richard~P. Feynman.
 \newblock {\em International Journal of Theoretical Physics},
   21(6-7):467–488, 1982.
 
+\bibitem{orus_2014}
+Román Orús.
+\newblock A practical introduction to tensor networks: Matrix product states
+  and projected entangled pair states.
+\newblock {\em Annals of Physics}, 349:117–158, 2014.
+
+\bibitem{schollwock_2005}
+U.~Schollwöck.
+\newblock The density-matrix renormalization group.
+\newblock {\em Reviews of Modern Physics}, 77(1):259–315, 2005.
+
+\bibitem{hallberg_2006}
+Karen~A. Hallberg.
+\newblock New trends in density matrix renormalization.
+\newblock {\em Advances in Physics}, 55(5-6):477–526, 2006.
+
+\bibitem{https://doi.org/10.48550/arxiv.quant-ph/0608197}
+D.~Perez-Garcia, F.~Verstraete, M.~M. Wolf, and J.~I. Cirac.
+\newblock Matrix product state representations.
+\newblock 2006.
+
+\bibitem{schollwock_2011}
+Ulrich Schollwöck.
+\newblock The density-matrix renormalization group in the age of matrix product
+  states.
+\newblock {\em Annals of Physics}, 326(1):96–192, 2011.
+
+\bibitem{10.21468/SciPostPhysLectNotes.5}
+Johannes Hauschild and Frank Pollmann.
+\newblock {Efficient numerical simulations with Tensor Networks: Tensor Network
+  Python (TeNPy)}.
+\newblock {\em SciPost Phys. Lect. Notes}, page~5, 2018.
+
 \bibitem{kandala_mezzacapo_temme_takita_brink_chow_gambetta_2017}
 Abhinav Kandala, Antonio Mezzacapo, Kristan Temme, Maika Takita, Markus Brink,
   Jerry~M. Chow, and Jay~M. Gambetta.
@@ -94,26 +127,21 @@ Leo Zhou, Sheng-Tao Wang, Soonwon Choi, Hannes Pichler, and Mikhail~D. Lukin.
   and implementation on near-term devices.
 \newblock {\em Phys. Rev. X}, 10:021067, Jun 2020.
 
-\bibitem{schollwock_2005}
-U.~Schollwöck.
-\newblock The density-matrix renormalization group.
-\newblock {\em Reviews of Modern Physics}, 77(1):259–315, 2005.
+\bibitem{vidal_2008}
+G.~Vidal.
+\newblock Class of quantum many-body states that can be efficiently simulated.
+\newblock {\em Physical Review Letters}, 101(11), 2008.
 
-\bibitem{hallberg_2006}
-Karen~A. Hallberg.
-\newblock New trends in density matrix renormalization.
-\newblock {\em Advances in Physics}, 55(5-6):477–526, 2006.
+\bibitem{haghshenas_gray_potter_chan_2022}
+Reza Haghshenas, Johnnie Gray, Andrew~C. Potter, and Garnet Kin-Lic Chan.
+\newblock Variational power of quantum circuit tensor networks.
+\newblock {\em Physical Review X}, 12(1), 2022.
 
-\bibitem{https://doi.org/10.48550/arxiv.quant-ph/0608197}
-D.~Perez-Garcia, F.~Verstraete, M.~M. Wolf, and J.~I. Cirac.
-\newblock Matrix product state representations.
-\newblock 2006.
-
-\bibitem{schollwock_2011}
-Ulrich Schollwöck.
-\newblock The density-matrix renormalization group in the age of matrix product
-  states.
-\newblock {\em Annals of Physics}, 326(1):96–192, 2011.
+\bibitem{barratt_dborin_bal_stojevic_pollmann_green_2021}
+F.~Barratt, James Dborin, Matthias Bal, Vid Stojevic, Frank Pollmann, and A.~G.
+  Green.
+\newblock Parallel quantum simulation of large systems on small nisq computers.
+\newblock {\em npj Quantum Information}, 7(1), 2021.
 
 \bibitem{PhysRevResearch.4.L022020}
 Adam Smith, Bernhard Jobst, Andrew~G. Green, and Frank Pollmann.
