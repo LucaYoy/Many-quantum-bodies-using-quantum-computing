@@ -1,7 +1,7 @@
 import numpy as np
 
 #set up variables
-J , h = (1,1)
+J , h = (1.5,1)
 id = np.eye(2)
 X = np.array([[0,1], [1,0]])
 Z = np.array([[1,0],[0,-1]])
