@@ -1,9 +1,5 @@
 import numpy as np
-
-#useful gates
-H = 1/np.sqrt(2)*np.array([[1,1],[1,-1]])
-CNOT = np.reshape([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]],(2,2,2,2))
-RXX = np.reshape(np.cos(np.pi/8)*np.identity(4)-1j*np.sin(np.pi/8)*np.kron(np.array([[0,1],[0,-1]]),np.array([[0,1],[0,-1]])),(2,2,2,2))
+import usefulGates as g
 
 def circuit(n, *gates, extraGateAtLayer = (None,None)):
 	psi = np.zeros(2**n)
@@ -19,5 +15,8 @@ def circuit(n, *gates, extraGateAtLayer = (None,None)):
 
 	return psi.flatten() 
 
-print(circuit(4,H,CNOT,CNOT,CNOT),'\n') #first example in meeting
+CNOT = np.reshape(g.CNOT,(2,2,2,2))
+H = np.reshape(g.H,(2,2))
+RXX = np.reshape(g.RXX,(2,2,2,2))
+print(circuit(4,H,CNOT,CNOT,CNOT),'\n') #first example
 print(circuit(4,H,CNOT,CNOT,CNOT,extraGateAtLayer=(RXX,2))) #second example
