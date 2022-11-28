@@ -27,7 +27,4 @@ def computeLayerGate(n,*orderedGates):
 
 	return np.array(reduce(np.kron, layeredGate)) 
 
-gate = computeLayerGate(4,(g.H,0),(g.H,1),(g.RXX,2,3))
-print(gate)
-
-computeCircuitGate = lambda *layeredGates: reduce(lambda mat1,mat2: np.matmult(mat1,mat2),layeredGates.reverse())  
+computeCircuitGate = lambda inputPsi,*layeredGates: np.matmul(reduce(lambda mat1,mat2: np.matmul(mat1,mat2),layeredGates),inputPsi) 
