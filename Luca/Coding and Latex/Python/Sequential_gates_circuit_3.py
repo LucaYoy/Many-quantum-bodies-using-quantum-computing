@@ -1,10 +1,11 @@
 import numpy as np
 import usefulGates as g
 
-def sequentialCircuit(n, *gates, extraGateAtLayer = (None,None)):
-	psi = np.zeros(2**n)
-	psi[0] = 1
-	psi = psi.reshape(tuple([2]*n))
+def sequentialCircuit(n,*gates,psi = None, extraGateAtLayer = (None,None)):
+	if psi is None:
+		psi = np.zeros(2**n)
+		psi[0] = 1
+		psi = psi.reshape(tuple([2]*n))
 	#print(extraGateAtLayer)
 
 	psi = np.tensordot(gates[0],psi, (1,0)) #first gate is single qubit
