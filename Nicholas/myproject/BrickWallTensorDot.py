@@ -47,14 +47,14 @@ Circuit=Circuit(4)
 brick_wall(2,5,Circuit)   
 t = Circuit.psi.reshape(4,4) 
 
-class Circuit2:
+class Circuit2:# For testing
     def __init__(self,n):
         self.n = n
         self.psi = np.zeros(2**n)
         self.psi[0] = 1
         self.psi = self.psi.reshape(tuple([2]*n))#define initial psi
 
-def solutionM(Circuit2):
+def solutionM(Circuit2):# Add the gates in 1 by 1, as a check
     unitary(0,Circuit2,0)
     unitary(2,Circuit2,1)
     unitary(1,Circuit2,2)
