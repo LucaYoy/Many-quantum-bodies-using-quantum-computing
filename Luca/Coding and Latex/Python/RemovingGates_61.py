@@ -1,13 +1,13 @@
 import BrickWall_51 as bw
 import numpy as np
 
-circuit = bw.BrickWallCircuit(4, 4)
+circuit = bw.BrickWallCircuit(8, 10)
 psiTarget = np.array([1 for i in range(2**circuit.N)]).reshape(tuple([2]*circuit.N))
 psiCheck = circuit.computeUsingTensorDot()
 
 #only for checking purposes
 def splitCircuit(splitLayer):
-	nrGatesTillSplit = int(np.ceil(splitLayer/2) + splitLayer)
+	nrGatesTillSplit = int(np.floor(circuit.N/2)*np.ceil(splitLayer/2)+np.floor((circuit.N-1)/2)*np.floor(splitLayer/2))
 
 	firstHalfCircuit = bw.BrickWallCircuit(circuit.N, splitLayer,gates = circuit.gates[0:nrGatesTillSplit])
 	secondHalfCircuit = bw.BrickWallCircuit(circuit.N, circuit.M - splitLayer,psiIn = np.conjugate(psiTarget),reverseOrder=1, gates=circuit.gates[nrGatesTillSplit:])
@@ -15,7 +15,7 @@ def splitCircuit(splitLayer):
 	return firstHalfCircuit, secondHalfCircuit
 
 def removeGate(indexLayer,indexRelativeToLayer):
-	nrGatesTillSplit = int(np.ceil(indexLayer/2) + indexLayer)
+	nrGatesTillSplit = int(np.floor(circuit.N/2)*np.ceil(indexLayer/2)+np.floor((circuit.N-1)/2)*np.floor(indexLayer/2))
 	nrGatesOnLayer = int(np.floor((circuit.N-indexLayer%2)/2))
 	indexOfGate = nrGatesTillSplit + indexRelativeToLayer
 	gatesWithQubits = circuit.gatesWithQubitsIndices()
@@ -32,7 +32,7 @@ def removeGate(indexLayer,indexRelativeToLayer):
 
 	#Care in how we take tensor dot between the two halves to get indices in correct places to make life easier when we add gates back 
 	E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = circuit.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
-	return E, circuit.gates[indexOfGate]
+	return E, circuit.gates[indexOfGate] #return gate removed only for checking purposes
 
 #checks
 overlap1 = np.tensordot(circuit.computeUsingTensorDot(),np.conjugate(psiTarget),circuit.N)
@@ -43,8 +43,8 @@ overlap2 = np.tensordot(firstHalfCircuit.computeUsingTensorDot(),secondHalfCircu
 print(overlap2)
 
 #putting gate back should give same as overlap1 and overlap2
-E, gate = removeGate(0, 0)
-print(np.tensordot(E, gate,circuit.N))
+E, gate = removeGate(1,2)
+print(np.tensordot(E, gate,4))
 
 
 	

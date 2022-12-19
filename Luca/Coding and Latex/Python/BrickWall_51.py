@@ -8,7 +8,7 @@ class BrickWallCircuit:
 		self.M = M
 		self.gates = gates
 		self.reverseOrder = reverseOrder
-		self.nrGates = int(np.ceil(M/2) + M)
+		self.nrGates = int(np.floor(N/2)*np.ceil(M/2)+np.floor((N-1)/2)*np.floor(M/2))
 
 		if gates is None: 
 			gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.nrGates)]
