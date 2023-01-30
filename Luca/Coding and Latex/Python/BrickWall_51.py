@@ -41,3 +41,53 @@ class BrickWallCircuit:
 		if gatesWithQubitsIndices is None: 
 			gatesWithQubitsIndices = self.gatesWithQubitsIndices(MOriginal)
 		return reduce(self.tensordotPsiWithTwoQubitGate,gatesWithQubitsIndices,self.psiIn)
+
+	def removeGate(self ,psiTarget,indexLayer,indexRelativeToLayer):
+		nrGatesTillSplit = int(np.floor(self.N/2)*np.ceil(indexLayer/2)+np.floor((self.N-1)/2)*np.floor(indexLayer/2))
+		nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
+		indexOfGate = nrGatesTillSplit + indexRelativeToLayer
+		gatesWithQubits = self.gatesWithQubitsIndices()
+		#print(gatesWithQubits)
+		qubitsOfGate = gatesWithQubits[indexOfGate][1], gatesWithQubits[indexOfGate][2]
+		qubitsToContract = [qubit for qubit in range(self.N) if qubit not in qubitsOfGate ]
+		#print(qubitsToContract)
+		firstHalfGatesWithQubits =  gatesWithQubits[:nrGatesTillSplit+nrGatesOnLayer][:indexOfGate] + gatesWithQubits[:nrGatesTillSplit+nrGatesOnLayer][indexOfGate+1:]
+		#print(firstHalfGatesWithQubits)
+
+		firstHalfCircuit = BrickWallCircuit(self.N, indexLayer+1,gates = firstHalfGatesWithQubits) #This is not quite a brick wall since one gate is missing, however all we need is to use computeUsingTensorDot method
+		secondHalfCircuit = BrickWallCircuit(self.N, self.M - indexLayer-1,psiIn = np.conjugate(psiTarget),reverseOrder=1, gates=self.gates[nrGatesTillSplit+nrGatesOnLayer:])
+		#print(secondHalfCircuit.gatesWithQubitsIndices(self.M))
+
+		#Care in how we take tensor dot between the two halves to get indices in correct places to make life easier when we add gates back 
+		E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = self.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
+		return E, self.gates[indexOfGate] #return gate removed only for checking purposes
+
+	def optimize(self,psiTarget,minRelativeError, maxCycles):
+		cycles = 0
+		#error = 1 - np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
+
+		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
+			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
+			for indexLayer in range(self.M): #iterate through layers
+				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
+				for gateIndex in range(nrGatesOnLayer): #iterate through gates on that layer
+					E, gateRm = self.removeGate(psiTarget,indexLayer,gateIndex)
+					W, sigma, Vdagger = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+					newGate = np.matmul(W,Vdagger).reshape(2,2,2,2) #get the new gate that will maximize the fidelity
+
+					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
+					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
+					if newGateOverlap < oldGateOverlap:
+						raise Exception("overlap decreased, something went wrong!")
+					
+					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
+			
+			newOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap at the end of cycle
+			relativeError = newOverlap - oldOverlap #relativeError at end of cycle
+			cycles += 1
+			if relativeError < minRelativeError or cycles > maxCycles:
+				break
+		print (cycles, relativeError)
+
+
+

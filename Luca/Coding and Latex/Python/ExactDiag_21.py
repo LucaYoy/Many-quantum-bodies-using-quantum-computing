@@ -21,7 +21,7 @@ def exactDiag(n,j,h):
 	E, V = np.linalg.eigh(H)
 	return E[0],V[:,0]
 
-print(exactDiag(2, 1.5, 1))
+#print(exactDiag(2, 1.5, 1))
 
 
 
