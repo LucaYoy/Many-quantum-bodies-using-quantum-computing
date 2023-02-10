@@ -64,8 +64,7 @@ class BrickWallCircuit:
 
 	def optimize(self,psiTarget,minChangeInOverlap, maxCycles):
 		cycles = 0
-		#error = 1 - np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
-
+		breakFlag = False
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
 			for indexLayer in range(self.M): #iterate through layers
@@ -78,18 +77,23 @@ class BrickWallCircuit:
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
 					print(oldGateOverlap,newGateOverlap)
-					'''if newGateOverlap >= 1 or oldGateOverlap >= 1:
-						break'''
+
 					if newGateOverlap < oldGateOverlap:
 						raise Exception("overlap decreased, something went wrong!")
 					
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
-			
+					if np.abs(newGateOverlap-1) < 10**(-8):
+						breakFlag = True
+						print("numerical precision reached!")
+						break
+				if breakFlag: 
+					break
+
 			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
 			cycles += 1
-			if (changeInOverlap < minChangeInOverlap) or cycles > maxCycles:
+			if (changeInOverlap < minChangeInOverlap) or cycles > maxCycles or breakFlag:
 				break
-		print (cycles, changeInOverlap)
+		print(cycles, changeInOverlap)
 
 
 
