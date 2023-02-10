@@ -62,7 +62,7 @@ class BrickWallCircuit:
 		E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = self.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
 		return E, self.gates[indexOfGate] #return gate removed only for checking purposes
 
-	def optimize(self,psiTarget,minRelativeError, maxCycles):
+	def optimize(self,psiTarget,minChangeInOverlap, maxCycles):
 		cycles = 0
 		#error = 1 - np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
 
@@ -77,17 +77,19 @@ class BrickWallCircuit:
 
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
+					print(oldGateOverlap,newGateOverlap)
+					'''if newGateOverlap >= 1 or oldGateOverlap >= 1:
+						break'''
 					if newGateOverlap < oldGateOverlap:
 						raise Exception("overlap decreased, something went wrong!")
 					
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
 			
-			newOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap at the end of cycle
-			relativeError = newOverlap - oldOverlap #relativeError at end of cycle
+			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
 			cycles += 1
-			if relativeError < minRelativeError or cycles > maxCycles:
+			if (changeInOverlap < minChangeInOverlap) or cycles > maxCycles:
 				break
-		print (cycles, relativeError)
+		print (cycles, changeInOverlap)
 
 
 
