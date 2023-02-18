@@ -1,4 +1,4 @@
-import BrickWall as bw #I think this name will be changed tp the name of what my full brick wall file is named
+import BrickWall as bw 
 
 Qubits = 4
 Layers = 3
