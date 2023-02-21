@@ -13,7 +13,7 @@ def exactDiagonalization(n,J,h):
     
     _, V = np.linalg.eigh(H)
     
-    return V[:0].reshape(tuple([2]*n))
+    return V[:,0].reshape(tuple([2]*n))
 
 
 if __name__ == "__main__":
