@@ -1,0 +1,38 @@
+import numpy as np
+
+
+def compute_entanglement(n):
+    """Splits the circuit at a chosen point and computes the entanglement
+    entropy
+    """
+    # Check how many qubits 
+    qubits = len(Circuit.phi.shape)
+    # Contract the qubits from n to the total number of qubits
+    contracted_qubits = range(qubits)[n:]
+    # Find the partial state
+    partial_state = np.tensordot(Circuit.phi, Circuit.phi.conj(), 
+                                 axes=(contracted_qubits,contracted_qubits))
+    
+    # Reshape the tensor into a matrix
+    partial_state = partial_state.reshape((2**n,2**n))
+    # Find the eigenvalues of the matrix
+    eigenvalues,_ = np.linalg.eigh(partial_state)
+    # Remove any eigenvalues which arise due to rounding errors
+    eigenvalues = [eigenvalue for eigenvalue in eigenvalues if eigenvalue>10**(-12)]
+    
+    entropy = -np.sum(eigenvalues * np.log(eigenvalues))
+    
+    return entropy, partial_state, eigenvalues
+    
+    def compute_entanglement2(n):
+    """Performs singular valued decomposition to compute entanglement
+    """
+
+    qubits = len(Circuit2.phi.shape)
+    # Calculate reshaped matrix
+    psi = Circuit2.phi.reshape(2**n, 2**(qubits - n))
+    
+    _,eigenvalues,_ = np.linalg.svd(psi)
+    entropy = -np.sum(eigenvalues**2 * np.log(eigenvalues**2))
+    
+    return entropy
