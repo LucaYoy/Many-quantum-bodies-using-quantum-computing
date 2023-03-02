@@ -1,0 +1,37 @@
+import BrickWallFixed as bw
+import Entanglement as et
+import matplotlib.pyplot as plt
+import ExactDiagonalization as ed
+
+Qubits = 8
+
+J = 3
+h = 4
+
+plt.figure(figsize=(9, 6))
+for i in range(15,16):
+    Circuit = bw.Circuit(Qubits, i, J, h)
+    psi = Circuit.brick_wall()
+
+    entropies = []
+    for n in range(0, Qubits+1):
+        entropy = et.compute_entanglement(psi, n)
+        entropies.append(entropy)
+    
+    plt.plot(range(Qubits+1), entropies, label=f'{i} layers')
+    
+for i in range(1,6):
+    phi = ed.exactDiagonalization(8, i, h)
+
+    entropies_exact = []
+    for n in range(0, Qubits):
+        entropy = et.compute_entanglement(phi, n)
+        entropies_exact.append(entropy)
+
+    entropies_exact.append(0)
+    plt.plot(range(Qubits+1), entropies_exact, label=f'psi target, J = {i}')
+
+plt.xlabel('i band')
+plt.ylabel('Entanglement entropy')
+plt.legend()
+plt.show()
