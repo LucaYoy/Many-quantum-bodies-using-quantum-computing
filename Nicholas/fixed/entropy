@@ -1,16 +1,16 @@
 import numpy as np
-
+import BrickWallFixed as bw
 
 def compute_entanglement(n):
     """Splits the circuit at a chosen point and computes the entanglement
     entropy
     """
-    # Check how many qubits 
-    qubits = len(Circuit.phi.shape)
+    # Check number of qubits 
+    qubits = len(psi.shape)
     # Contract the qubits from n to the total number of qubits
     contracted_qubits = range(qubits)[n:]
     # Find the partial state
-    partial_state = np.tensordot(Circuit.phi, Circuit.phi.conj(), 
+    partial_state = np.tensordot(psi, psi.conj(), 
                                  axes=(contracted_qubits,contracted_qubits))
     
     # Reshape the tensor into a matrix
@@ -22,17 +22,31 @@ def compute_entanglement(n):
     
     entropy = -np.sum(eigenvalues * np.log(eigenvalues))
     
-    return entropy, partial_state, eigenvalues
-    
-    def compute_entanglement2(n):
+    return entropy
+
+
+def compute_entanglement2(n):
     """Performs singular valued decomposition to compute entanglement
     """
-
-    qubits = len(Circuit2.phi.shape)
+    # Check number of qubits
+    qubits = len(psi.shape)
+    # Set initial wavefunction
+    phi = psi    
     # Calculate reshaped matrix
-    psi = Circuit2.phi.reshape(2**n, 2**(qubits - n))
+    phi = phi.reshape(2**n, 2**(qubits - n))
     
-    _,eigenvalues,_ = np.linalg.svd(psi)
+    _,eigenvalues,_ = np.linalg.svd(phi)
     entropy = -np.sum(eigenvalues**2 * np.log(eigenvalues**2))
     
     return entropy
+
+Qubits = 8
+
+Circuit = bw.Circuit(Qubits, 20, 1.5, 3)
+psi = Circuit.brick_wall()
+
+split = 4
+
+print(compute_entanglement2(split))
+
+print(compute_entanglement(split))
