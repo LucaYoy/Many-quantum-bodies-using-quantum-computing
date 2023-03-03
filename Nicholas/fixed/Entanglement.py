@@ -1,7 +1,16 @@
-import numpy as np
-import BrickWallFixed as bw
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Feb 18 17:03:35 2023
 
-def compute_entanglement(n):
+@author: msyne
+"""
+
+import numpy as np
+import BrickWall as bw
+import matplotlib.pyplot as plt
+import ExactDiagonalization as ed
+
+def compute_entanglement(psi, n):
     """Splits the circuit at a chosen point and computes the entanglement
     entropy
     """
@@ -25,7 +34,7 @@ def compute_entanglement(n):
     return entropy
 
 
-def compute_entanglement2(n):
+def compute_entanglement2(psi,n):
     """Performs singular valued decomposition to compute entanglement
     """
     # Check number of qubits
@@ -40,13 +49,43 @@ def compute_entanglement2(n):
     
     return entropy
 
-Qubits = 8
+if __name__ == "__main__":
 
-Circuit = bw.Circuit(Qubits, 20, 1.5, 3)
-psi = Circuit.brick_wall()
+    Qubits = 8
+    
+    J = 3
+    h = 4
+    
+    plt.figure(figsize=(9, 6))
 
-split = 4
+    Circuit = bw.Circuit(Qubits, 3, J, h)
+    psi = Circuit.brick_wall()
+    
+    entropies = []
+    for n in range(0, Qubits+1):
+        entropy = compute_entanglement(psi, n)
+        entropies.append(entropy)
+    
+    plt.plot(range(Qubits+1), entropies, label=f'3 layers')
+        
+    phi = ed.exactDiagonalization(8, J, h)
 
-print(compute_entanglement2(split))
+    entropies_exact = []
+    for n in range(0, Qubits):
+        entropy = compute_entanglement(phi, n)
+        entropies_exact.append(entropy)
 
-print(compute_entanglement(split))
+    entropies_exact.append(0)
+    plt.plot(range(Qubits+1), entropies_exact, label=f'psi target, J = {J}')
+    
+    plt.xlabel('i band')
+    plt.ylabel('Entanglement entropy')
+    plt.legend()
+    plt.show()
+   
+
+    
+    
+    
+    
+    
