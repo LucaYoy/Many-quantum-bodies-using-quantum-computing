@@ -11,3 +11,5 @@ def S(A,psiTarget):
 	entropy = -np.sum(eigenvalues*np.log(eigenvalues))
 
 	return entropy
+
+def I(A,B,psiTarget): return S(A, psiTarget) + S(B, psiTarget) - S(list(set(A)|set(B)), psiTarget)
