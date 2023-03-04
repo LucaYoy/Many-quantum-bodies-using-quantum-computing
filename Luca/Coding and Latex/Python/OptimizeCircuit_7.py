@@ -9,9 +9,11 @@ psiTarget = ed.exactDiag(circuit.N, 1.5, 1)[1].reshape(tuple([2]*circuit.N))
 A = [1,4,5]
 B = [2]
 
-entropyMethod1 = en.S([1,4,5], psiTarget)
-print(entropyMethod1)
+entropy = en.S([1,4,5], psiTarget)
+print(entropy)
 
 mutualI = en.I(A,B, psiTarget)
 print(mutualI)
+
+print(np.array(en.matrixI(psiTarget)))
 #circuit.optimize(psiTarget,0.001,1000)
