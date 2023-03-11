@@ -19,7 +19,7 @@ def exactDiag(n,j,h):
 
 	H = j*sum1+h*sum2
 	E, V = np.linalg.eigh(H)
-	return E[0],V[:,0]
+	return H,E[0],V[:,0]
 
 #print(exactDiag(2, 1.5, 1))
 
