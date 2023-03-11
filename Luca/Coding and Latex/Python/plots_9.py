@@ -58,8 +58,9 @@ def plotMatrixI(psiTarget,layers):
 	plt.show()
 
 def plotJ(psiTarget,layers,log=False):
+	N = len(psiTarget.shape)
 	fig, ax  = plt.subplots()
-	d = np.array(range(N))
+	d = np.array(range(1,N))
 	exactJ = np.array([en.J(dist, psiTarget) for dist in d])
 	
 	if log:
@@ -87,4 +88,4 @@ def plotJ(psiTarget,layers,log=False):
 
 #plotS(psiTarget,[1,2,3])
 #plotMatrixI(psiTarget, [1,2,3])
-plotJ(psiTarget, [1,2,3])
+plotJ(psiTarget, [1,2,3],True)
