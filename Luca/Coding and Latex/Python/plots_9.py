@@ -86,6 +86,6 @@ def plotJ(psiTarget,layers,log=False):
 	ax.legend()
 	plt.show() 
 
-#plotS(psiTarget,[1,2,3])
-#plotMatrixI(psiTarget, [1,2,3])
+plotS(psiTarget,[1,2,3])
+plotMatrixI(psiTarget, [1,2,3])
 plotJ(psiTarget, [1,2,3],True)

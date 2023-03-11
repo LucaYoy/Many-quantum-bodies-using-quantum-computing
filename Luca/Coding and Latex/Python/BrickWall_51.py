@@ -1,17 +1,26 @@
 import numpy as np
 from functools import reduce
 from scipy.stats import unitary_group as U
+from scipy.linalg import expm
 
 class BrickWallCircuit:
-	def __init__(self,N,M,psiIn = None,reverseOrder = 0,gates = None):
+	def __init__(self,N,M,psiIn = None,reverseOrder = 0,gates = None,gatesRandomFlag = False):
 		self.N = N
 		self.M = M
-		self.gates = gates
 		self.reverseOrder = reverseOrder
 		self.nrGates = int(np.floor(N/2)*np.ceil(M/2)+np.floor((N-1)/2)*np.floor(M/2))
 
-		if gates is None: 
-			gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.nrGates)]
+		if gates is None:
+			if gatesRandomFlag: 
+				gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.nrGates)]
+			else: #make random matrix closer to identity
+				epsilon = 0.01
+				gates = []
+				for i in range(self.nrGates):
+					R = U.rvs(4)
+					M = np.eye(4)+epsilon*R
+					H = (M+np.conjugate(np.transpose(M)))/2
+					gates.append(expm(-(1j)*H).reshape(2,2,2,2))
 		self.gates = gates
 
 		if psiIn is None:

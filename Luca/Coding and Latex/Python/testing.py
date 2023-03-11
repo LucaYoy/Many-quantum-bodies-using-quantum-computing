@@ -3,17 +3,18 @@ import BrickWall_51 as bw
 import ExactDiag_21 as ed
 import Entropy as en
 
-circuit = bw.BrickWallCircuit(5, 8)
+circuit = bw.BrickWallCircuit(8,2, gatesRandomFlag=False)
 psiTarget = ed.exactDiag(circuit.N, 1.5, 1)[1].reshape(tuple([2]*circuit.N))
 #psiTarget = (1/np.sqrt(2))*np.array([1,0,0,1]).reshape(2,2) #bell state
-A = [1,4,5]
-B = [2]
+# A = [1,4,5]
+# B = [2]
 
-entropy = en.S([1,4,5], psiTarget)
-print(entropy)
+# entropy = en.S([1,4,5], psiTarget)
+# print(entropy)
 
-mutualI = en.I(A,B, psiTarget)
-print(mutualI)
+# mutualI = en.I(A,B, psiTarget)
+# print(mutualI)
 
-print(np.array(en.matrixI(psiTarget)))
-#circuit.optimize(psiTarget,0.001,1000)
+# print(np.array(en.matrixI(psiTarget)))
+
+circuit.optimize(psiTarget,0.001,1000)
