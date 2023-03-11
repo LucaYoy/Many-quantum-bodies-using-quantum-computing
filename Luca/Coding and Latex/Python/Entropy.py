@@ -11,3 +11,9 @@ def S(A,psiTarget):
 	entropy = -np.sum(eigenvalues*np.log(eigenvalues))
 
 	return entropy
+
+def I(A,B,psiTarget): return S(A, psiTarget) + S(B, psiTarget) - S(list(set(A)|set(B)), psiTarget)
+
+def matrixI(psiTarget):
+	nrQubits = nrQubits = len(psiTarget.shape)
+	return [[I([i],[j],psiTarget) for j in range(1,nrQubits+1)] for i in range(1,nrQubits+1)]
