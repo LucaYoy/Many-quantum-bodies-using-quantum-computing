@@ -33,7 +33,6 @@ def compute_entanglement(psi, n):
     
     return entropy
 
-
 def compute_entanglement2(psi,n):
     """Performs singular valued decomposition to compute entanglement
     """
