@@ -165,7 +165,7 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
@@ -198,11 +198,9 @@ class Circuit:
                 # Add a check to make sure the gates are being generated correctly
                 if abs(overlap_new) < abs(overlap_old):
                     print("Error, overlap isn't increasing")
-            
-                #if relative_error > min_relative_error:
-                #    break
-                
-            overlaps.append(abs(overlap_new))
+
+            overlaps.append(1-(abs(overlap_new)))
+
             relative_errors.append(relative_error)  
             
             # Calculate the change in overlap between the old and new overlaps
@@ -214,13 +212,21 @@ class Circuit:
                 break
             
             # Plot the overlap against the number of iterations (optional)
-            plt.plot(range(iterations+1), overlaps, 'b')
-            plt.xlabel("Number of iterations")
-            plt.ylabel("Overlap")
-            plt.show()
+            if plot:
+                plt.plot(range(iterations+1), overlaps, 'b')
+                plt.xlabel("Number of iterations")
+                plt.ylabel("Overlap")
+                plt.show()
         
             iterations += 1
+      
             
         if overlap_change > min_overlap_change:
-            print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")                        
-        return relative_errors, overlaps
+
+            print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
+
+        final_psi = self.brick_wall()
+                              
+        return relative_errors, overlaps, final_psi
+        
+    
