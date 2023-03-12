@@ -10,10 +10,43 @@ psiTarget = exactD[2].reshape(tuple([2]*N))
 exactE = exactD[1]
 H = exactD[0]
 
-def plotEnergy(psiTarget,exactE,H):
+def plotEnergy(psiTarget,exactE,H,maxLayers):
+	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
+	x = range(1,maxLayers+1)
+	ax.plot([1,maxLayers],[exactE,exactE],'--k',label='Exact')
+	ax.set_xlabel('Layers')
+	ax.set_ylabel('Energy')
+	E = []
 
-def plotOvelap(psiTarget,)
+	for layer in x:
+		circuit = bw.BrickWallCircuit(N, layer)
+		approx = circuit.optimize(psiTarget,0.00001,1000).flatten()
+		E.append(np.vdot(approx,np.matmul(H,approx)))
+
+	ax.plot(x,E,'o-',label='Approximation')
+	ax.legend()
+	fig.savefig('../plots/energyPlot.png',format='png')
+	plt.show()
+
+def plotOvelap(psiTarget,maxLayers):
+	N = len(psiTarget.shape)
+	fig, ax = plt.subplots()
+	x = range(1,maxLayers+1)
+	ax.plot([1,maxLayers],[0,0],'--k',label='Exact')
+	ax.set_xlabel('Layers')
+	ax.set_ylabel('1-|Overlap|')
+	overlap = []
+
+	for layer in x:
+		circuit = bw.BrickWallCircuit(N, layer)
+		approx = circuit.optimize(psiTarget,0.00001,1000).flatten()
+		overlap.append(np.abs(np.vdot(approx,psiTarget.flatten())))
+
+	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
+	ax.legend()
+	fig.savefig('../plots/overlapPlot.png',format='png')
+	plt.show()
 
 def plotS(psiTarget,layers):
 	N = len(psiTarget.shape)
@@ -97,4 +130,6 @@ def plotJ(psiTarget,layers,log=False):
 
 #plotS(psiTarget,[1,2,3])
 #plotMatrixI(psiTarget, [1,2,3])
-plotJ(psiTarget, [1,2,3],False)
+#plotJ(psiTarget, [1,2,3],False)
+#plotEnergy(psiTarget, exactE, H, 6)
+#plotOvelap(psiTarget, 10)
