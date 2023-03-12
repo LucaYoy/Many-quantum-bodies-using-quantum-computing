@@ -17,7 +17,7 @@ class BrickWallCircuit:
 				epsilon = 0.01
 				gates = []
 				for i in range(self.nrGates):
-					R = U.rvs(4)
+					R = np.random.rand(4,4) #U.rvs(4)
 					M = np.eye(4)+epsilon*R
 					H = (M+np.conjugate(np.transpose(M)))/2
 					gates.append(expm(-(1j)*H).reshape(2,2,2,2))
@@ -85,11 +85,11 @@ class BrickWallCircuit:
 
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
-					#print(oldGateOverlap,newGateOverlap)
+					print(oldGateOverlap,newGateOverlap)
 
 					if newGateOverlap < oldGateOverlap:
-						raise Exception("overlap decreased, something went wrong!")
-					
+						raise Exception(f'overlap decreased, something went wrong at cycle {cycles+1}')
+			
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
 					if np.abs(newGateOverlap-1) < 10**(-8):
 						breakFlag = True
@@ -99,10 +99,11 @@ class BrickWallCircuit:
 					break
 
 			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
+			precision = 1-newGateOverlap
 			cycles += 1
-			if (changeInOverlap < minChangeInOverlap) or cycles > maxCycles or breakFlag:
+			if (changeInOverlap < minChangeInOverlap and precision<0.2) or cycles > maxCycles or breakFlag:
 				break
-		#print(cycles, changeInOverlap)
+		print(cycles, changeInOverlap)
 		return self.computeUsingTensorDot()
 
 
