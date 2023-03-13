@@ -215,7 +215,7 @@ class Circuit:
             if plot:
                 plt.plot(range(iterations+1), overlaps, 'b')
                 plt.xlabel("Number of iterations")
-                plt.ylabel("Overlap")
+                plt.ylabel("1 - Overlap")
                 plt.show()
         
             iterations += 1
@@ -226,6 +226,7 @@ class Circuit:
             print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
 
         final_psi = self.brick_wall()
+        #print(abs(np.tensordot(final_psi, self.phi, axes=self.n)))
                               
         return relative_errors, overlaps, final_psi
         
