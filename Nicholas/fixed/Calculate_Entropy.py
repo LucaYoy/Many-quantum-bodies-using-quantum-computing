@@ -15,7 +15,7 @@ J = 1
 h = 0.5
 
 plt.figure(figsize=(8, 5))
-for Layers in range(11,14):
+for Layers in range(1,4):
 
     Circuit = bw.Circuit(Qubits, Layers, J ,h)
     psi=Circuit.optimize_circuit(10, 0.0001, False)[2]

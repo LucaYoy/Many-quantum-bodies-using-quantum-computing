@@ -37,7 +37,7 @@ def entanglement_entropy(psi, A, B):
     
     entropy = -np.sum(eigenvalues * np.log(eigenvalues))
     
-    return entropy, remaining_qubits
+    return entropy
    
 def mutual_information(psi):
     """Takes an input wavefunction, and finds the resulting entanglement entropy
@@ -70,7 +70,6 @@ def mutual_information(psi):
     return entropy_matrix, abs_d, sum_entropy
 
 
-
 if __name__ == "__main__":
     
     Qubits = 8
@@ -96,7 +95,7 @@ if __name__ == "__main__":
     #plt.yscale('log')
     plt.show()
     
-    p = entanglement_entropy(psi, 1, 1)
+    #p = entanglement_entropy(psi, 1, 1)
     
     #g = et1.compute_entanglement(psi, 1)
 
