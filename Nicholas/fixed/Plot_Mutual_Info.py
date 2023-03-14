@@ -13,26 +13,23 @@ import numpy as np
 
 Qubits = 8
 J = 1
-H = 0.5
+H = 1
 
 phi = ed.exactDiagonalization(Qubits, J, H)
 
 I_matrix, abs_d, sum_I = et.mutual_info_matrix(phi)
 
 for Layers in range(1,4):
-    entropies = []
     Circuit = bw.Circuit(Qubits, Layers, J, H)
-    psi=Circuit.optimize_circuit(Qubits, 0.0001, False)[2]
+    psi = Circuit.optimize_circuit(10, 0.0001, False)[2]
     
     I_matrix2, abs_d2, sum_I2 = et.mutual_info_matrix(psi)
-    
-    sum_I2 = [x for x in sum_I2 if x >= 1e-12]
     
     plt.plot(np.log(abs_d2), np.log(sum_I2), "-o", label=f"{Layers} Layers")
 
 plt.plot(np.log(abs_d), np.log(sum_I), "-o", label="Target State")
 plt.xlabel('d')
-plt.ylabel('Sum of I_matrix')
-plt.title('Sum of I_matrix vs d')
+plt.ylabel('J')
+plt.title('J vs d')
 plt.legend()
 plt.show()

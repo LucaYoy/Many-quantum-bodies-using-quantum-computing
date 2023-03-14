@@ -14,7 +14,7 @@ Qubits = 8
 J = 1
 H = 0.5
 
-phi = ed.exactDiagonalization(Qubits, J, H)
+phi = ed.exactDiagonalization(Qubits, J, H)[1]
 
 entropies_exact = []
 

@@ -23,7 +23,7 @@ class Circuit:
         self.psi[0] = 1
         self.psi = self.psi.reshape(tuple([2]*n)) # Define initial psi
         
-        self.phi = ed.exactDiagonalization(n, J, h) # Define target state
+        self.phi = ed.exactDiagonalization(n, J, h)[1] # Define target state
         
         self.left = self.psi.copy()  # current state of left half of circuit
         self.right = self.phi.copy()  # current state of right half of circuit
@@ -165,7 +165,7 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
@@ -206,27 +206,30 @@ class Circuit:
             # Calculate the change in overlap between the old and new overlaps
             if iterations > 0:
                 overlap_change = abs(overlaps[-1] - overlaps[-2])
+            if show_overlap:
                 
-            if min_overlap_change > overlap_change:
-                print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
-                break
+                if min_overlap_change > overlap_change:
+                    print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
+                    break
             
             # Plot the overlap against the number of iterations (optional)
             if plot:
-                plt.plot(range(iterations+1), overlaps, 'b')
+                plt.plot(range(iterations+1), overlaps, "-o", label="Approximation")
                 plt.xlabel("Number of iterations")
                 plt.ylabel("1 - Overlap")
+                plt.axhline(y=0, color='k', linestyle='dashed', label="Exact")
+                plt.legend()
                 plt.show()
         
             iterations += 1
       
+        if show_overlap:
             
-        if overlap_change > min_overlap_change:
-
-            print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
+            if overlap_change > min_overlap_change:
+    
+                print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
 
         final_psi = self.brick_wall()
-        #print(abs(np.tensordot(final_psi, self.phi, axes=self.n)))
                               
         return relative_errors, overlaps, final_psi
         
