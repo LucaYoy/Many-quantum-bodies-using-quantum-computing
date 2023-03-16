@@ -1,4 +1,5 @@
 import numpy as np
+import ExactDiag_21 as ed
 
 def S(A,psiTarget):
 	nrQubits = len(psiTarget.shape)
@@ -21,3 +22,7 @@ def J(d,psiTarget):
 def matrixI(psiTarget):
 	nrQubits = len(psiTarget.shape)
 	return [[I([i],[j],psiTarget) for j in range(1,nrQubits+1)] for i in range(1,nrQubits+1)]
+
+
+psiTarget =  ed.exactDiag(6, 1, 1)
+I(1,2, psiTarget)

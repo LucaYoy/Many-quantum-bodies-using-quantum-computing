@@ -59,7 +59,7 @@ def plotS(psiTarget,layers):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 
 		enApprox = [en.S(range(1,i+1), approx) for i in bond]
 
@@ -86,7 +86,7 @@ def plotMatrixI(psiTarget,layers):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(8, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 		matrixApprox = en.matrixI(approx) 
 
 		axs[layer].matshow(matrixApprox,cmap=plt.cm.Oranges)
@@ -116,7 +116,7 @@ def plotJ(psiTarget,layers,log=False):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 		approxJ = np.array([en.J(dist, approx) for dist in d])
 
 		ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
@@ -128,8 +128,10 @@ def plotJ(psiTarget,layers,log=False):
 	ax.legend()
 	plt.show() 
 
+
 #plotS(psiTarget,[1,2,3])
 #plotMatrixI(psiTarget, [1,2,3])
 #plotJ(psiTarget, [1,2,3],False)
 #plotEnergy(psiTarget, exactE, H, 6)
 #plotOvelap(psiTarget, 10)
+

@@ -33,7 +33,6 @@ def compute_entanglement(psi, n):
     
     return entropy
 
-
 def compute_entanglement2(psi,n):
     """Performs singular valued decomposition to compute entanglement
     """
@@ -51,7 +50,7 @@ def compute_entanglement2(psi,n):
 
 if __name__ == "__main__":
 
-    Qubits = 8
+    Qubits = 6
     
     J = 3
     h = 4

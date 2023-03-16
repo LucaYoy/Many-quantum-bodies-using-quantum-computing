@@ -3,6 +3,7 @@ import Gates as g
 import ExactDiagonalization as ed
 from scipy.stats import unitary_group as U
 import matplotlib.pyplot as plt
+import scipy.linalg as sp
 
 class Circuit:
     """ Class that implements brickwall quantum circuit and optimization
@@ -13,7 +14,7 @@ class Circuit:
 
     """
 
-    def __init__(self,n, m, J, h, gates=None):
+    def __init__(self,n, m, J, h, gates=None, gatesrandom=False):
         self.n = n # Number of qubits
         self.m = m # Number of layers
         self.num_gates = int(np.floor(n/2) * np.ceil(m/2) + np.floor((n-1)/2) * np.floor(m/2))
@@ -23,13 +24,25 @@ class Circuit:
         self.psi[0] = 1
         self.psi = self.psi.reshape(tuple([2]*n)) # Define initial psi
         
-        self.phi = ed.exactDiagonalization(n, J, h) # Define target state
+        self.phi = ed.exactDiagonalization(n, J, h)[1] # Define target state
         
         self.left = self.psi.copy()  # current state of left half of circuit
         self.right = self.phi.copy()  # current state of right half of circuit
 
         if gates is None:
-            gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.num_gates)]
+            if gatesrandom:
+                gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.num_gates)]
+            # Generate gates closer to the identity
+            else:
+                e = 0.001
+                gates = []
+                for i in range(self.num_gates):
+                    X = np.random.rand(4, 4) + np.random.rand(4, 4) * 1j
+                    M = np.eye(4) + e*X
+                    H = (np.matrix.getH(M) + M) /2
+                    U1 = sp.expm(-(1j)*H)
+                    gates.append(U1.reshape(2,2,2,2))
+                
         self.gates = gates
 
     def resetLeft(self):
@@ -165,7 +178,7 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
@@ -198,29 +211,39 @@ class Circuit:
                 # Add a check to make sure the gates are being generated correctly
                 if abs(overlap_new) < abs(overlap_old):
                     print("Error, overlap isn't increasing")
-            
-                #if relative_error > min_relative_error:
-                #    break
-                
-            overlaps.append(abs(overlap_new))
+
+            overlaps.append(1-(abs(overlap_new)))
+
             relative_errors.append(relative_error)  
             
             # Calculate the change in overlap between the old and new overlaps
             if iterations > 0:
                 overlap_change = abs(overlaps[-1] - overlaps[-2])
+            if show_overlap:
                 
-            if min_overlap_change > overlap_change:
-                print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
-                break
+                if min_overlap_change > overlap_change:
+                    print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
+                    break
             
             # Plot the overlap against the number of iterations (optional)
-            plt.plot(range(iterations+1), overlaps, 'b')
-            plt.xlabel("Number of iterations")
-            plt.ylabel("Overlap")
-            plt.show()
+            if plot:
+                plt.plot(range(iterations+1), overlaps, "-o", label="Approximation")
+                plt.xlabel("Number of iterations")
+                plt.ylabel("1 - Overlap")
+                plt.axhline(y=0, color='k', linestyle='dashed', label="Exact")
+                plt.legend()
+                plt.show()
         
             iterations += 1
+      
+        if show_overlap:
             
-        if overlap_change > min_overlap_change:
-            print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")                        
-        return relative_errors, overlaps
+            if overlap_change > min_overlap_change:
+    
+                print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
+        # Find the final state of psi by applying the new gates
+        final_psi = self.brick_wall()
+                              
+        return relative_errors, overlaps, final_psi
+        
+    

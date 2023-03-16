@@ -18,9 +18,9 @@ def exactDiagonalization(n,J,h):
         
     H = sum1 + sum2
     
-    _, V = np.linalg.eigh(H)
+    E, V = np.linalg.eigh(H)
     
-    return V[:,0].reshape(tuple([2]*n))
+    return E[0], V[:,0].reshape(tuple([2]*n)), H
 
 if __name__ == "__main__":
 
