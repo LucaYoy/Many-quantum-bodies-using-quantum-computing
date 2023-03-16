@@ -5,7 +5,48 @@ import Entropy as en
 import matplotlib.pyplot as plt
 
 N = 8
-psiTarget = ed.exactDiag(N, 1, 1.5)[1].reshape(tuple([2]*N))
+exactD = ed.exactDiag(N, 1, 0.8)
+psiTarget = exactD[2].reshape(tuple([2]*N))
+exactE = exactD[1]
+H = exactD[0]
+
+def plotEnergy(psiTarget,exactE,H,maxLayers):
+	N = len(psiTarget.shape)
+	fig, ax = plt.subplots()
+	x = range(1,maxLayers+1)
+	ax.plot([1,maxLayers],[exactE,exactE],'--k',label='Exact')
+	ax.set_xlabel('Layers')
+	ax.set_ylabel('Energy')
+	E = []
+
+	for layer in x:
+		circuit = bw.BrickWallCircuit(N, layer)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
+		E.append(np.vdot(approx,np.matmul(H,approx)))
+
+	ax.plot(x,E,'o-',label='Approximation')
+	ax.legend()
+	fig.savefig('../plots/energyPlot.png',format='png')
+	plt.show()
+
+def plotOvelap(psiTarget,maxLayers):
+	N = len(psiTarget.shape)
+	fig, ax = plt.subplots()
+	x = range(1,maxLayers+1)
+	ax.plot([1,maxLayers],[0,0],'--k',label='Exact')
+	ax.set_xlabel('Layers')
+	ax.set_ylabel('1-|Overlap|')
+	overlap = []
+
+	for layer in x:
+		circuit = bw.BrickWallCircuit(N, layer)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
+		overlap.append(np.abs(np.vdot(approx,psiTarget.flatten())))
+
+	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
+	ax.legend()
+	fig.savefig('../plots/overlapPlot.png',format='png')
+	plt.show()
 
 def plotS(psiTarget,layers):
 	N = len(psiTarget.shape)
@@ -63,12 +104,13 @@ def plotJ(psiTarget,layers,log=False):
 	d = np.array(range(1,N))
 	exactJ = np.array([en.J(dist, psiTarget) for dist in d])
 	
+	ax.plot(d,exactJ,'o-k',label='Exact')
 	if log:
-		ax.plot(np.log(d),np.log(exactJ),'o-k',label='Exact')
+		ax.set_yscale('log')
+		ax.set_xscale('log')
 		ax.set_xlabel('log(d)')
 		ax.set_ylabel('log(J)')
 	else:
-		ax.plot(d,exactJ,'o-k',label='Exact')
 		ax.set_xlabel('d')
 		ax.set_ylabel('J')
 
@@ -77,15 +119,19 @@ def plotJ(psiTarget,layers,log=False):
 		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 		approxJ = np.array([en.J(dist, approx) for dist in d])
 
+		ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
 		if log:
-			ax.plot(np.log(d),np.log(approxJ),'o-',label=f'Layers: {layer}')
-		else:
-			ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
+			ax.set_yscale('log')
+			ax.set_xscale('log')	
 
 	fig.savefig('../plots/JPlots.png',format='png')
 	ax.legend()
 	plt.show() 
 
-plotS(psiTarget,[1,2,3])
-plotMatrixI(psiTarget, [1,2,3])
-plotJ(psiTarget, [1,2,3],True)
+
+#plotS(psiTarget,[1,2,3])
+#plotMatrixI(psiTarget, [1,2,3])
+#plotJ(psiTarget, [1,2,3],True)
+plotEnergy(psiTarget, exactE, H, 10)
+#plotOvelap(psiTarget, 10)
+
