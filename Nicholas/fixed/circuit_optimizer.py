@@ -7,6 +7,6 @@ Layers = 10
 J = 3
 H = 2
 
-Circuit = bw.Circuit(Qubits, Layers, J ,H)
+Circuit = bw.Circuit(Qubits, Layers, J ,H, gatesrandom=False)
 # Sweeps, Accuracy, ShowGraph?, ShowFinalOverlap?
-p=Circuit.optimize_circuit(20, 0.0001, True, False)
+p=Circuit.optimize_circuit(20, 0.0001, True, True)

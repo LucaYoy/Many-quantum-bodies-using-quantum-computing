@@ -3,6 +3,7 @@ import Gates as g
 import ExactDiagonalization as ed
 from scipy.stats import unitary_group as U
 import matplotlib.pyplot as plt
+import scipy.linalg as sp
 
 class Circuit:
     """ Class that implements brickwall quantum circuit and optimization
@@ -13,7 +14,7 @@ class Circuit:
 
     """
 
-    def __init__(self,n, m, J, h, gates=None):
+    def __init__(self,n, m, J, h, gates=None, gatesrandom=False):
         self.n = n # Number of qubits
         self.m = m # Number of layers
         self.num_gates = int(np.floor(n/2) * np.ceil(m/2) + np.floor((n-1)/2) * np.floor(m/2))
@@ -29,7 +30,19 @@ class Circuit:
         self.right = self.phi.copy()  # current state of right half of circuit
 
         if gates is None:
-            gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.num_gates)]
+            if gatesrandom:
+                gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.num_gates)]
+            # Generate gates closer to the identity
+            else:
+                e = 0.001
+                gates = []
+                for i in range(self.num_gates):
+                    X = np.random.rand(4, 4) + np.random.rand(4, 4) * 1j
+                    M = np.eye(4) + e*X
+                    H = (np.matrix.getH(M) + M) /2
+                    U1 = sp.expm(-(1j)*H)
+                    gates.append(U1.reshape(2,2,2,2))
+                
         self.gates = gates
 
     def resetLeft(self):
@@ -228,7 +241,7 @@ class Circuit:
             if overlap_change > min_overlap_change:
     
                 print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
-
+        # Find the final state of psi by applying the new gates
         final_psi = self.brick_wall()
                               
         return relative_errors, overlaps, final_psi
