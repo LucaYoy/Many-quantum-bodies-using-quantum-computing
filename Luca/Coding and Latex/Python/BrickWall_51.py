@@ -71,11 +71,12 @@ class BrickWallCircuit:
 		E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = self.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
 		return E, self.gates[indexOfGate] #return gate removed only for checking purposes
 
-	def optimize(self,psiTarget,minChangeInOverlap, maxCycles):
+	def optimize(self,psiTarget,minPerChange, maxCycles):
 		cycles = 0
 		breakFlag = False
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
+			oldError = 1-oldOverlap
 			for indexLayer in range(self.M): #iterate through layers
 				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
 				for gateIndex in range(nrGatesOnLayer): #iterate through gates on that layer
@@ -85,9 +86,9 @@ class BrickWallCircuit:
 
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
-					print(oldGateOverlap,newGateOverlap)
+					#print(oldGateOverlap,newGateOverlap)
 
-					if newGateOverlap < oldGateOverlap:
+					if newGateOverlap < oldGateOverlap and np.abs(newGateOverlap-oldGateOverlap)>10**(-6):
 						raise Exception(f'overlap decreased, something went wrong at cycle {cycles+1}')
 			
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
@@ -99,9 +100,10 @@ class BrickWallCircuit:
 					break
 
 			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
-			precision = 1-newGateOverlap
+			percentageChange = changeInOverlap/oldError #percentage change in error = 1-overlap
+			newError = 1-newGateOverlap
 			cycles += 1
-			if (changeInOverlap < minChangeInOverlap and precision<0.2) or cycles > maxCycles or breakFlag:
+			if (percentageChange < minPerChange and newError<0.1) or cycles > maxCycles or breakFlag:
 				break
 		print(cycles, changeInOverlap)
 		return self.computeUsingTensorDot()

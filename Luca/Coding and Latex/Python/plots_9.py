@@ -5,7 +5,7 @@ import Entropy as en
 import matplotlib.pyplot as plt
 
 N = 8
-psiTarget = ed.exactDiag(N, 1, 0.5)[1].reshape(tuple([2]*N))
+psiTarget = ed.exactDiag(N, 1, 1.5)[1].reshape(tuple([2]*N))
 
 def plotS(psiTarget,layers):
 	N = len(psiTarget.shape)
@@ -18,7 +18,7 @@ def plotS(psiTarget,layers):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 
 		enApprox = [en.S(range(1,i+1), approx) for i in bond]
 
@@ -45,7 +45,7 @@ def plotMatrixI(psiTarget,layers):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(8, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 		matrixApprox = en.matrixI(approx) 
 
 		axs[layer].matshow(matrixApprox,cmap=plt.cm.Oranges)
@@ -74,7 +74,7 @@ def plotJ(psiTarget,layers,log=False):
 
 	for layer in layers:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000)
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
 		approxJ = np.array([en.J(dist, approx) for dist in d])
 
 		if log:
