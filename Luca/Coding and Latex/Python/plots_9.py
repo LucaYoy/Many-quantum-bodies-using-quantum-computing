@@ -5,7 +5,7 @@ import Entropy as en
 import matplotlib.pyplot as plt
 
 N = 8
-exactD = ed.exactDiag(N, 1, 0.5)
+exactD = ed.exactDiag(N, 1, 0.8)
 psiTarget = exactD[2].reshape(tuple([2]*N))
 exactE = exactD[1]
 H = exactD[0]
@@ -21,7 +21,7 @@ def plotEnergy(psiTarget,exactE,H,maxLayers):
 
 	for layer in x:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000).flatten()
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
 		E.append(np.vdot(approx,np.matmul(H,approx)))
 
 	ax.plot(x,E,'o-',label='Approximation')
@@ -40,7 +40,7 @@ def plotOvelap(psiTarget,maxLayers):
 
 	for layer in x:
 		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000).flatten()
+		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
 		overlap.append(np.abs(np.vdot(approx,psiTarget.flatten())))
 
 	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
@@ -131,7 +131,7 @@ def plotJ(psiTarget,layers,log=False):
 
 #plotS(psiTarget,[1,2,3])
 #plotMatrixI(psiTarget, [1,2,3])
-#plotJ(psiTarget, [1,2,3],False)
-#plotEnergy(psiTarget, exactE, H, 6)
+#plotJ(psiTarget, [1,2,3],True)
+plotEnergy(psiTarget, exactE, H, 10)
 #plotOvelap(psiTarget, 10)
 
