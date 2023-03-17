@@ -12,7 +12,7 @@ import numpy as np
 
 Qubits = 8
 J = 1
-h = 1
+h = 0.5
 Layers = 6
 
 phi = ed.exactDiagonalization(Qubits, J, h)
@@ -22,9 +22,10 @@ E = []
 
 for x in range(1, Layers):
     Circuit = bw.Circuit(Qubits, Layers, J, h)
-    psi = Circuit.optimize_circuit(10, 0.0001, False, False)[2]
+    psi = Circuit.optimize_circuit(10, 0.000001, False, False)[2]
     psi = psi.flatten()
     E.append((np.vdot(psi, np.matmul(H, psi))))
+    print(E)
     
 plt.plot(range(x), E, "-o", label="Approximation")
     

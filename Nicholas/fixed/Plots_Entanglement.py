@@ -27,7 +27,7 @@ for i in range(0, len(phi.shape)+1):
 for Layers in range(1,4):
     entropies = []
     Circuit = bw.Circuit(Qubits, Layers, J, H)
-    psi=Circuit.optimize_circuit(Qubits, 0.0001, False)[2]
+    psi=Circuit.optimize_circuit(100, 0.00000000000001, False)[2]
     
     for i in range(0, len(psi.shape)+1):
         entropy = et.compute_entropy(list(range(i)), psi)
