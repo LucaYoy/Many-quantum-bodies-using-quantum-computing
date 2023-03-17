@@ -37,7 +37,7 @@ class Circuit:
                 e = 0.001
                 gates = []
                 for i in range(self.num_gates):
-                    X = np.random.rand(4, 4) + np.random.rand(4, 4) * 1j
+                    X = np.random.randn(4, 4) + np.random.randn(4, 4) * 1j
                     M = np.eye(4) + e*X
                     H = (np.matrix.getH(M) + M) /2
                     U1 = sp.expm(-(1j)*H)
@@ -182,7 +182,7 @@ class Circuit:
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
-        
+        stopped_flag=False
         # Create empty lists of any vairables that need to be stored
         overlaps = []
         overlapsold = []
@@ -209,8 +209,8 @@ class Circuit:
                              
                 relative_error = abs(overlap_new) - abs(overlap_old) 
                 # Add a check to make sure the gates are being generated correctly
-                if abs(overlap_new) < abs(overlap_old):
-                    print("Error, overlap isn't increasing")
+                #if abs(overlap_new) < abs(overlap_old):
+                    #print("Error, overlap isn't increasing")
 
             overlaps.append(1-(abs(overlap_new)))
 
@@ -220,19 +220,26 @@ class Circuit:
             if iterations > 0:
                 overlap_change = abs(overlaps[-1] - overlaps[-2])
             if show_overlap:
-                
-                if min_overlap_change > overlap_change:
+                if not stopped_flag and min_overlap_change > overlap_change:
+        # Plot a red circle and label it on the graph
+                    plt.plot(iterations, overlaps[-1], 'ro')#, label="Stopped")
+                    
+        # Set the flag to True to indicate that the condition has been met once
+                    stopped_flag = True
+                  
                     print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
-                    break
+                     
             
             # Plot the overlap against the number of iterations (optional)
-            if plot:
-                plt.plot(range(iterations+1), overlaps, "-o", label="Approximation")
-                plt.xlabel("Number of iterations")
-                plt.ylabel("1 - Overlap")
-                plt.axhline(y=0, color='k', linestyle='dashed', label="Exact")
-                plt.legend()
-                plt.show()
+            #if plot:
+            #    plt.plot(range(iterations+1), overlaps)#, label="Approximation")
+            #    plt.xlabel("Number of iterations")
+            #    plt.ylabel("1 - Overlap")
+                #plt.axhline(y=0, color='k', linestyle='dashed')#, label="Exact")
+            #    plt.xscale("log")
+            #    plt.yscale("log")
+                #plt.legend()
+                #plt.show()
         
             iterations += 1
       
@@ -244,6 +251,6 @@ class Circuit:
         # Find the final state of psi by applying the new gates
         final_psi = self.brick_wall()
                               
-        return relative_errors, overlaps, final_psi
+        return relative_errors, overlaps, final_psi, iterations
         
     

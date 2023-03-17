@@ -62,6 +62,8 @@ def mutual_info_matrix(psi):
         for B in range(n):
             if A != B:
                 I_matrix[A][B] = compute_I([A], [B], psi)
+            else:
+                I_matrix[A][B] = compute_I([A], [B], psi)
                 
                 # Calculate d
                 d = abs(A - B)

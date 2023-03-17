@@ -28,7 +28,7 @@ for Layers in range(1,4):
     plt.plot(range(Qubits+1), entropies,'-o', label=f'{Layers} layers')
 
     
-phi = ed.exactDiagonalization(Qubits, J, h)
+phi = ed.exactDiagonalization(Qubits, J, h)[1]
 
 entropies_exact = []
 for n in range(0, Qubits):
