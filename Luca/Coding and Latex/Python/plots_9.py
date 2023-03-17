@@ -4,8 +4,9 @@ import ExactDiag_21 as ed
 import Entropy as en
 import matplotlib.pyplot as plt
 
-N = 8
-exactD = ed.exactDiag(N, 1, 0.8)
+N = 6
+j,h = 1,1
+exactD = ed.exactDiag(N, j, h)
 psiTarget = exactD[2].reshape(tuple([2]*N))
 exactE = exactD[1]
 H = exactD[0]
@@ -128,10 +129,45 @@ def plotJ(psiTarget,layers,log=False):
 	ax.legend()
 	plt.show() 
 
+def plotOvelap_sweeps(psiTarget,layers,maxIterations,runs):
+	N = len(psiTarget.shape)
+	fig, ax = plt.subplots(len(layers),2,layout='constrained')
+
+	for layer in layers:
+		for  i in range(runs):
+			circuit = bw.BrickWallCircuit(N, layer,gatesRandomFlag=True)
+			overlapArray, criteria1, criteria2 = circuit.optimize(psiTarget, 0.001, maxIterations)[1:]
+			ax[layer-1,0].plot(range(1,len(overlapArray)+1),1-overlapArray, '-b')
+			if criteria1!=None:	
+				ax[layer-1,0].plot(criteria1[0],1-criteria1[1],'xr')
+			if criteria2!=None:	
+				ax[layer-1,0].plot(criteria2[0],1-criteria2[1],'xg')
+			ax[layer-1,0].set_yscale('log')
+			ax[layer-1,0].set_xscale('log')
+			ax[layer-1,0].set_ylabel('log(1-|Overlap|)')
+			ax[layer-1,0].set_xlabel('log(sweeps)')
+
+			circuit = bw.BrickWallCircuit(N, layer)
+			overlapArray, criteria1, criteria2 = circuit.optimize(psiTarget, 0.001, maxIterations)[1:]
+			ax[layer-1,1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
+			if criteria1!=None:
+				ax[layer-1,1].plot(criteria1[0],1-criteria1[1],'xr')
+			if criteria2!=None:
+				ax[layer-1,1].plot(criteria2[0],1-criteria2[1],'xg')
+			ax[layer-1,1].set_yscale('log')
+			ax[layer-1,1].set_xscale('log')
+			ax[layer-1,1].set_ylabel('log(1-|Overlap|)')
+			ax[layer-1,1].set_xlabel('log(sweeps)')
+
+	ax[0,0].set_title('Random gates initialized')
+	ax[0,1].set_title('Close to Id gates initialized')
+	fig.savefig(f'../plots/{6}qb_params{j}{h}.png',format='png')
+	plt.show()
+
 
 #plotS(psiTarget,[1,2,3])
 #plotMatrixI(psiTarget, [1,2,3])
 #plotJ(psiTarget, [1,2,3],True)
-plotEnergy(psiTarget, exactE, H, 10)
+#plotEnergy(psiTarget, exactE, H, 10)
 #plotOvelap(psiTarget, 10)
-
+plotOvelap_sweeps(psiTarget, [1,2,3], 1000, 10)
