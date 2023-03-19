@@ -74,6 +74,9 @@ class BrickWallCircuit:
 	def optimize(self,psiTarget,minPerChange, maxCycles):
 		cycles = 0
 		breakFlag = False
+		overlapArray = []
+		stoppingCriteria1Hit = False
+		stoppingCriteria2Hit = False
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
 			oldError = 1-oldOverlap
@@ -99,14 +102,25 @@ class BrickWallCircuit:
 				if breakFlag: 
 					break
 
+			overlapArray.append(newGateOverlap)
 			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
 			percentageChange = changeInOverlap/oldError #percentage change in error = 1-overlap
 			newError = 1-newGateOverlap
 			cycles += 1
-			if (percentageChange < minPerChange and newError<0.1) or cycles > maxCycles or breakFlag:
+
+			if percentageChange < minPerChange and not(stoppingCriteria1Hit): #note when percentage change criteria was hit
+				criteria1 = (cycles,newGateOverlap)
+				stoppingCriteria1Hit = True
+			if breakFlag and not(stoppingCriteria2Hit): #note if numerical accuracy reached 
+				criteria2 = (cycles,newGateOverlap)
+				stoppingCriteria2Hit = True
+
+			if cycles>=maxCycles:
 				break
-		print(cycles, changeInOverlap)
-		return self.computeUsingTensorDot()
+			# if (percentageChange < minPerChange and newError<0.1) or cycles > maxCycles or breakFlag:
+			# 	break
+		#print(cycles, percentageChange,stoppingCriteria1Hit,stoppingCriteria2Hit)
+		return self.computeUsingTensorDot(), np.array(overlapArray), criteria1 if 'criteria1' in locals() else None, criteria2 if 'criteria2' in locals() else None
 
 
 

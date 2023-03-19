@@ -1,17 +1,26 @@
 import numpy as np
 from functools import reduce
 from scipy.stats import unitary_group as U
+from scipy.linalg import expm
 
 class BrickWallCircuit:
-	def __init__(self,N,M,psiIn = None,reverseOrder = 0,gates = None):
+	def __init__(self,N,M,psiIn = None,reverseOrder = 0,gates = None,gatesRandomFlag = False):
 		self.N = N
 		self.M = M
-		self.gates = gates
 		self.reverseOrder = reverseOrder
 		self.nrGates = int(np.floor(N/2)*np.ceil(M/2)+np.floor((N-1)/2)*np.floor(M/2))
 
-		if gates is None: 
-			gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.nrGates)]
+		if gates is None:
+			if gatesRandomFlag: 
+				gates = [U.rvs(4).reshape(2,2,2,2) for i in range(self.nrGates)]
+			else: #make random matrix closer to identity
+				epsilon = 0.01
+				gates = []
+				for i in range(self.nrGates):
+					R = np.random.rand(4,4) #U.rvs(4)
+					M = np.eye(4)+epsilon*R
+					H = (M+np.conjugate(np.transpose(M)))/2
+					gates.append(expm(-(1j)*H).reshape(2,2,2,2))
 		self.gates = gates
 
 		if psiIn is None:
@@ -62,11 +71,15 @@ class BrickWallCircuit:
 		E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = self.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
 		return E, self.gates[indexOfGate] #return gate removed only for checking purposes
 
-	def optimize(self,psiTarget,minChangeInOverlap, maxCycles):
+	def optimize(self,psiTarget,minPerChange, maxCycles):
 		cycles = 0
 		breakFlag = False
+		overlapArray = []
+		stoppingCriteria1Hit = False
+		stoppingCriteria2Hit = False
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
+			oldError = 1-oldOverlap
 			for indexLayer in range(self.M): #iterate through layers
 				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
 				for gateIndex in range(nrGatesOnLayer): #iterate through gates on that layer
@@ -76,11 +89,11 @@ class BrickWallCircuit:
 
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
-					print(oldGateOverlap,newGateOverlap)
+					#print(oldGateOverlap,newGateOverlap)
 
-					if newGateOverlap < oldGateOverlap:
-						raise Exception("overlap decreased, something went wrong!")
-					
+					if newGateOverlap < oldGateOverlap and np.abs(newGateOverlap-oldGateOverlap)>10**(-6):
+						raise Exception(f'overlap decreased, something went wrong at cycle {cycles+1}')
+			
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one
 					if np.abs(newGateOverlap-1) < 10**(-8):
 						breakFlag = True
@@ -89,11 +102,25 @@ class BrickWallCircuit:
 				if breakFlag: 
 					break
 
+			overlapArray.append(newGateOverlap)
 			changeInOverlap = newGateOverlap - oldOverlap #changeInOverlap at end of cycle
+			percentageChange = changeInOverlap/oldError #percentage change in error = 1-overlap
+			newError = 1-newGateOverlap
 			cycles += 1
-			if (changeInOverlap < minChangeInOverlap) or cycles > maxCycles or breakFlag:
+
+			if percentageChange < minPerChange and not(stoppingCriteria1Hit): #note when percentage change criteria was hit
+				criteria1 = (cycles,newGateOverlap)
+				stoppingCriteria1Hit = True
+			if breakFlag and not(stoppingCriteria2Hit): #note if numerical accuracy reached 
+				criteria2 = (cycles,newGateOverlap)
+				stoppingCriteria2Hit = True
+
+			if cycles>=maxCycles:
 				break
-		print(cycles, changeInOverlap)
+			# if (percentageChange < minPerChange and newError<0.1) or cycles > maxCycles or breakFlag:
+			# 	break
+		#print(cycles, percentageChange,stoppingCriteria1Hit,stoppingCriteria2Hit)
+		return self.computeUsingTensorDot(), np.array(overlapArray), criteria1 if 'criteria1' in locals() else None, criteria2 if 'criteria2' in locals() else None
 
 
 

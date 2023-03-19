@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --partition=defq
-#SBATCH --array=1-10
+#SBATCH --array=0,1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --mem=10m
-#SBATCH --time=00:10:00
+#SBATCH --mem=10g
+#SBATCH --time=120:00:00
 #below use Linux commands, which will run on compute node
 
 echo "Running on `hostname`"

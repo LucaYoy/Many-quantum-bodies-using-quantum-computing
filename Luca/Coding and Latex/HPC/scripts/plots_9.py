@@ -162,8 +162,8 @@ def plotOvelap_sweeps(psiTarget,j,h,layers,maxIterations,runs):
 	ax[0,0].set_title('Random gates initialized')
 	ax[0,1].set_title('Close to Id gates initialized')
 	fig.set_size_inches(16,12)
-	fig.savefig(f'../plots/{N}qb_params{j}{h}.png',format='png',dpi=100)
-	plt.show()
+	fig.savefig(f'../../plots/{N}qb_params{j}{h}HPC.png',format='png',dpi=100)
+	#plt.show()
 
 
 #plotS(psiTarget,[1,2,3])
