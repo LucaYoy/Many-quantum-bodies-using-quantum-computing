@@ -84,6 +84,7 @@ class BrickWallCircuit:
 				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
 				for gateIndex in range(nrGatesOnLayer): #iterate through gates on that layer
 					E, gateRm = self.removeGate(psiTarget,indexLayer,gateIndex)
+					#E_new = gateRm + 0.5*E
 					W, sigma, Vdagger = np.linalg.svd(np.conjugate(E.reshape(4,4)))
 					newGate = np.matmul(W,Vdagger).reshape(2,2,2,2) #get the new gate that will maximize the fidelity
 

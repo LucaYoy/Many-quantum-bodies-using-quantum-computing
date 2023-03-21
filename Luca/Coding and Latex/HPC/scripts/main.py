@@ -15,4 +15,4 @@ param = parameters[which]
 N,j,h,layers,maxIterations,runs = param.values()
 psiTarget = ed.exactDiag(N, j, h)[2].reshape(tuple([2]*N))
 plts.plotOvelap_sweeps(psiTarget, j, h, layers, maxIterations, runs)
-#p = f"N = {str(param['N'])} M = {str(param['M'])} j = {str(param['j'])} h = {str(param['h'])}"
+
