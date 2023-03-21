@@ -178,7 +178,7 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True, stopped_flag=False):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True, stopped_flag=False, optimizationnew=False):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
@@ -192,26 +192,37 @@ class Circuit:
         overlap_change = float('inf') 
                            
         for i in range(max_iterations):    
-            
-            for index in range(self.num_gates):
-                # Remove each gate one by one    
-                E = self.remove_gate(index)
-                # The old overlap simply replaces the removed gate    
-                overlap_old = np.tensordot(E, self.gates[index], 4) 
-                   
-                # Perform singular-valued decomposition to generated the best gate 
-                U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
-                U_new = np.matmul(U,Vh).reshape(2,2,2,2)
-                
-                # The new overlap uses the newly generated gate                    
-                overlap_new = np.tensordot(E, U_new, 4)
-                # Replace the list of old gates with the new gates
-                self.gates[index] = U_new    
-                             
-                relative_error = abs(overlap_new) - abs(overlap_old) 
-                # Add a check to make sure the gates are being generated correctly
-                #if abs(overlap_new) < abs(overlap_old):
-                    #print("Error, overlap isn't increasing")
+            if optimizationnew is False:
+                for index in range(self.num_gates):
+                    # Remove each gate one by one    
+                    E = self.remove_gate(index)
+                    # The old overlap simply replaces the removed gate    
+                    overlap_old = np.tensordot(E, self.gates[index], 4) 
+                       
+                    # Perform singular-valued decomposition to generated the best gate 
+                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    # The new overlap uses the newly generated gate                    
+                    overlap_new = np.tensordot(E, U_new, 4)
+                    # Replace the list of old gates with the new gates
+                    self.gates[index] = U_new    
+                                 
+                    relative_error = abs(overlap_new) - abs(overlap_old) 
+                    # Add a check to make sure the gates are being generated correctly
+                    #if abs(overlap_new) < abs(overlap_old):
+                        #print("Error, overlap isn't increasing")
+            if optimizationnew is True:
+                eta = 0.5
+                for index in range(self.num_gates):
+                    E = self.remove_gate(index)
+                    U_old = self.gates[index]
+                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    new_gate = U_old + eta * U_new
+                    # Replace gate
+                    self.gates[index] = U_new
 
             overlaps.append(1-(abs(overlap_new)))
 

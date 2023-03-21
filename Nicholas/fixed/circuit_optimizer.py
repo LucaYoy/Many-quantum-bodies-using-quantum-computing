@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 Qubits = 6
 H = 1.5
 J = 1
-Layers = 5
-for i in range(10):
-    Circuit = bw.Circuit(Qubits, Layers, J ,H, gatesrandom=False)
+Layers = 3
+for i in range(5):
+    Circuit = bw.Circuit(Qubits, Layers, J ,H, gatesrandom=True)
     # Sweeps, Accuracy, ShowGraph?, ShowFinalOverlap?
-    _,overlaps,_, iterations,_=Circuit.optimize_circuit(1000, 10**-12, True, True)
+    _,overlaps,_, iterations,_=Circuit.optimize_circuit(50, 10**-12, True, True)
     
     flag = False
     for i in range(len(overlaps) -1, 0, -1):
@@ -29,6 +29,7 @@ for i in range(10):
 #plt.axhline(y=10**-14, color='k', linestyle='dashed', label="Exact")
 plt.xscale("log")
 plt.yscale("log")
+plt.xlim(1,iterations)
 #plt.legend("1 Layer")
-plt.title(f"J={J},h={H}, Random Gates, {Layers} Layer")
+plt.title(f"J={J},h={H}, Random Gates, {Layers} Layer, Qubits = {Qubits}")
 plt.show()
