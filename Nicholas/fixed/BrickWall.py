@@ -72,7 +72,7 @@ class Circuit:
         self.resetLeft()
 
         if end_index is None: 
-            end_index = self.num_gates - 1
+            end_index = self.num_gates
 
         gate_index = 0
         for layer in range(self.m):
@@ -178,15 +178,16 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True, stopped_flag=False):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
-        stopped_flag=False
+        
         # Create empty lists of any vairables that need to be stored
         overlaps = []
-        overlapsold = []
+        
         relative_errors = []
+        relative_overlap_changes = []
         iterations = 0
         overlap_change = float('inf') 
                            
@@ -215,14 +216,16 @@ class Circuit:
             overlaps.append(1-(abs(overlap_new)))
 
             relative_errors.append(relative_error)  
-            
+            relative_overlap_change = 1
             # Calculate the change in overlap between the old and new overlaps
             if iterations > 0:
                 overlap_change = abs(overlaps[-1] - overlaps[-2])
+                relative_overlap_change = overlap_change / overlaps[-1]
+                relative_overlap_changes.append(relative_overlap_change)
             if show_overlap:
-                if not stopped_flag and min_overlap_change > overlap_change:
-        # Plot a red circle and label it on the graph
-                    plt.plot(iterations, overlaps[-1], 'ro')#, label="Stopped")
+                if not stopped_flag and relative_overlap_change < min_overlap_change:
+        # Plot a red x and label it on the graph
+                    plt.plot(iterations, overlaps[-1], 'rx')#, label="Stopped")
                     
         # Set the flag to True to indicate that the condition has been met once
                     stopped_flag = True
@@ -251,6 +254,6 @@ class Circuit:
         # Find the final state of psi by applying the new gates
         final_psi = self.brick_wall()
                               
-        return relative_errors, overlaps, final_psi, iterations
+        return relative_errors, overlaps, final_psi, iterations, relative_overlap_changes
         
     
