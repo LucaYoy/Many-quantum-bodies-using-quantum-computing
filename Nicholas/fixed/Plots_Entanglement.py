@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 Qubits = 8
 J = 1
-H = 0.5
+H = 1.5
 
 phi = ed.exactDiagonalization(Qubits, J, H)[1]
 
@@ -27,7 +27,7 @@ for i in range(0, len(phi.shape)+1):
 for Layers in range(1,4):
     entropies = []
     Circuit = bw.Circuit(Qubits, Layers, J, H)
-    psi=Circuit.optimize_circuit(100, 0.00000000000001, False)[2]
+    psi=Circuit.optimize_circuit(100,10**-12, True, True, True)[2]
     
     for i in range(0, len(psi.shape)+1):
         entropy = et.compute_entropy(list(range(i)), psi)
@@ -40,3 +40,6 @@ plt.xlabel('Qubit')
 plt.ylabel('Entropy')
 plt.legend()
 plt.show()
+
+pli = phi.flatten()
+poi = psi.flatten()

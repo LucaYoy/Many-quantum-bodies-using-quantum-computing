@@ -28,7 +28,7 @@ def compute_entropy(A,psi):
     # Remove any eigenvalues which arise due to rounding errors
     eigenvalues = [eigenvalue for eigenvalue in eigenvalues if eigenvalue>10**(-12)]
     # Calculate entropy
-    entropy = -np.sum(eigenvalues * np.log2(eigenvalues))
+    entropy = -np.sum(eigenvalues * np.log(eigenvalues))
     
     return entropy
     
@@ -37,8 +37,8 @@ def compute_I(A,B,psi):
     
     A_entropy = compute_entropy(A, psi)
     B_entropy = compute_entropy(B, psi)
-    AUB_entropy = list(set(A)|set(B))
-    AUB_entropy = compute_entropy(AUB_entropy, psi)
+    AUB = list(set(A)|set(B))
+    AUB_entropy = compute_entropy(AUB, psi)
     
     return A_entropy + B_entropy - AUB_entropy
 
@@ -57,24 +57,22 @@ def mutual_info_matrix(psi):
     I_matrix = np.zeros((n, n))
     abs_d = np.arange(1, n)
     sum_I = np.zeros_like(abs_d, dtype=float)
-    
+
     for A in range(n):
         for B in range(n):
-            if A != B:
-                I_matrix[A][B] = compute_I([A], [B], psi)
-            else:
-                I_matrix[A][B] = compute_I([A], [B], psi)
-                
-                # Calculate d
-                d = abs(A - B)
-                # Calculate entropy
-                # Sum values and then move to next value of d
-                if d <= abs_d[-1]:
-                    sum_I[d-1] += I_matrix[A][B]
+            I_matrix[A][B] = compute_I([A], [B], psi)
+           
+            
+            # Calculate d
+            d = abs(A - B)
+            # Calculate entropy
+            # Sum values and then move to next value of d
+            if d <= abs_d[-1]:
+                sum_I[d-1] += I_matrix[A][B]    
                                            
     return I_matrix, abs_d, sum_I
-    
-    
+
+
     
     
     

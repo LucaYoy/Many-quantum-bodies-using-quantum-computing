@@ -72,7 +72,7 @@ class Circuit:
         self.resetLeft()
 
         if end_index is None: 
-            end_index = self.num_gates - 1
+            end_index = self.num_gates
 
         gate_index = 0
         for layer in range(self.m):
@@ -178,51 +178,65 @@ class Circuit:
 
         return E
     
-    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True):
+    def optimize_circuit(self, max_iterations, min_overlap_change, plot=True, show_overlap=True, stopped_flag=False, optimizationnew=False):
         """ Removes and replaces gates with the best possible gate in order to 
         give the largest overlap
         """
-        stopped_flag=False
+        
         # Create empty lists of any vairables that need to be stored
         overlaps = []
-        overlapsold = []
+        
         relative_errors = []
+        relative_overlap_changes = []
         iterations = 0
         overlap_change = float('inf') 
                            
         for i in range(max_iterations):    
-            
-            for index in range(self.num_gates):
-                # Remove each gate one by one    
-                E = self.remove_gate(index)
-                # The old overlap simply replaces the removed gate    
-                overlap_old = np.tensordot(E, self.gates[index], 4) 
-                   
-                # Perform singular-valued decomposition to generated the best gate 
-                U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
-                U_new = np.matmul(U,Vh).reshape(2,2,2,2)
-                
-                # The new overlap uses the newly generated gate                    
-                overlap_new = np.tensordot(E, U_new, 4)
-                # Replace the list of old gates with the new gates
-                self.gates[index] = U_new    
-                             
-                relative_error = abs(overlap_new) - abs(overlap_old) 
-                # Add a check to make sure the gates are being generated correctly
-                #if abs(overlap_new) < abs(overlap_old):
-                    #print("Error, overlap isn't increasing")
+            if optimizationnew is False:
+                for index in range(self.num_gates):
+                    # Remove each gate one by one    
+                    E = self.remove_gate(index)
+                    # The old overlap simply replaces the removed gate    
+                    overlap_old = np.tensordot(E, self.gates[index], 4) 
+                       
+                    # Perform singular-valued decomposition to generated the best gate 
+                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    # The new overlap uses the newly generated gate                    
+                    overlap_new = np.tensordot(E, U_new, 4)
+                    # Replace the list of old gates with the new gates
+                    self.gates[index] = U_new    
+                                 
+                    relative_error = abs(overlap_new) - abs(overlap_old) 
+                    # Add a check to make sure the gates are being generated correctly
+                    #if abs(overlap_new) < abs(overlap_old):
+                        #print("Error, overlap isn't increasing")
+            if optimizationnew is True:
+                eta = 0.5
+                for index in range(self.num_gates):
+                    E = self.remove_gate(index)
+                    U_old = self.gates[index]
+                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    new_gate = U_old + eta * U_new
+                    # Replace gate
+                    self.gates[index] = U_new
 
             overlaps.append(1-(abs(overlap_new)))
 
             relative_errors.append(relative_error)  
-            
+            relative_overlap_change = 1
             # Calculate the change in overlap between the old and new overlaps
             if iterations > 0:
                 overlap_change = abs(overlaps[-1] - overlaps[-2])
+                relative_overlap_change = overlap_change / overlaps[-1]
+                relative_overlap_changes.append(relative_overlap_change)
             if show_overlap:
-                if not stopped_flag and min_overlap_change > overlap_change:
-        # Plot a red circle and label it on the graph
-                    plt.plot(iterations, overlaps[-1], 'ro')#, label="Stopped")
+                if not stopped_flag and relative_overlap_change < min_overlap_change:
+        # Plot a red x and label it on the graph
+                    plt.plot(iterations, overlaps[-1], 'rx')#, label="Stopped")
                     
         # Set the flag to True to indicate that the condition has been met once
                     stopped_flag = True
@@ -251,6 +265,6 @@ class Circuit:
         # Find the final state of psi by applying the new gates
         final_psi = self.brick_wall()
                               
-        return relative_errors, overlaps, final_psi, iterations
+        return relative_errors, overlaps, final_psi, iterations, relative_overlap_changes
         
     

@@ -11,29 +11,47 @@ import matplotlib.pyplot as plt
 import ExactDiagonalization as ed
 import BrickWall as bw
 
+
 Qubits = 8
 J = 1
-H = 0.5
+H = 1.5
 
 phi = ed.exactDiagonalization(Qubits, J, H)[1]
 
-matrix,_,_ = et.mutual_info_matrix(phi)
+matrix_exact,_,_ = et.mutual_info_matrix(phi)
 
-fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12,12))
+fig, axs = plt.subplots(1, 4, figsize=(10,3), sharey=True)
 fig.suptitle("Mutual Information Matrix")
 
-axs[0, 0].set_title('Exact State', weight="bold")
-im0 = axs[0, 0].imshow(matrix, cmap='Greens')
-plt.colorbar(im0, ax=axs[0, 0])
+im1 = axs[0].imshow(matrix_exact, cmap='Greens')
+axs[0].set_title('Exact')
 
-for Layers in range(1,4):
-    Circuit = bw.Circuit(Qubits, Layers, J, H)
-    psi = Circuit.optimize_circuit(Qubits, 0.0001, False, False)[2]
 
-    matrix,_,_ = et.mutual_info_matrix(psi)
-    
-    axs[Layers // 2, Layers % 2].set_title(f'{Layers} Layers', weight="bold")
-    im = axs[Layers // 2, Layers % 2].imshow(matrix, cmap='Greens')
-    plt.colorbar(im, ax=axs[Layers // 2, Layers % 2])
+Circuit = bw.Circuit(Qubits, 1, J, H)
+psi = Circuit.optimize_circuit(100, 0.00001, False, True, True)[2]
+matrix1,_,_ = et.mutual_info_matrix(psi)
+
+im2 = axs[1].imshow(matrix1, cmap='Greens')
+axs[1].set_title('1 Layer')
+
+Circuit2 = bw.Circuit(Qubits, 2, J, H)
+psi2 = Circuit2.optimize_circuit(50, 0.00001, False, True, True)[2]
+matrix2,_,_ = et.mutual_info_matrix(psi2)
+
+im3 = axs[2].imshow(matrix2, cmap='Greens')
+axs[2].set_title('2 Layers')
+
+Circuit3 = bw.Circuit(Qubits, 3, J, H)
+psi3 = Circuit3.optimize_circuit(50, 0.00001, False, True, True)[2]
+matrix3,_,_ = et.mutual_info_matrix(psi3)
+
+im4 = axs[3].imshow(matrix3, cmap='Greens')
+axs[3].set_title('3 Layers')
+
+
+
+fig.colorbar(im2, ax=axs.ravel().tolist())
 
 plt.show()
+
+
