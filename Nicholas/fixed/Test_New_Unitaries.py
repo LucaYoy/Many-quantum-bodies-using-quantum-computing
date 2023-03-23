@@ -9,7 +9,7 @@ import BrickWall as bw
 import matplotlib.pyplot as plt
 
 Qubits = 6
-Layers = 6
+Layers = 3
 J = 1
 H = 1
 iterations = 1000
@@ -35,5 +35,6 @@ plt.axhline(y=10**-14, color='k', linestyle='dashed', label="Exact")
 plt.xscale("log")
 plt.yscale("log")
 plt.legend(["Old Optimization", "New Optimization"])
+plt.title(f"J={J},h={H}, {Layers} Layer, Qubits = {Qubits}")
 plt.show()
 
