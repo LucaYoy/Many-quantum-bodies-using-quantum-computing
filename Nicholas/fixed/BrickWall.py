@@ -192,7 +192,32 @@ class Circuit:
         overlap_change = float('inf') 
                            
         for i in range(max_iterations):    
-            if optimizationnew is False:
+            if optimizationnew:
+                eta = 0.1
+                for index in range(self.num_gates):
+                    # Remove each gate one by one
+                    E = self.remove_gate(index)
+                    # Old overlap
+                    overlap_old = np.tensordot(E, self.gates[index], 4)
+                    
+                    # Perform new optimization procedure 
+                    U_old = self.gates[index]
+                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
+                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    new_gate = U_old + eta * U_new
+                    # Once again perform SVD on this new gate to get a unitary
+                    U,s,Vh = np.linalg.svd(np.conjugate(new_gate.reshape(4,4)))
+                    new_gate = np.matmul(U,Vh).reshape(2,2,2,2)
+                    
+                    overlap_new = np.tensordot(E, new_gate, 4)
+                    # Replace gate
+                    self.gates[index] = new_gate
+                    
+                    relative_error = abs(overlap_new) - abs(overlap_old)
+                    #print(f"relative error is {relative_error}")
+                                        
+            else:
                 for index in range(self.num_gates):
                     # Remove each gate one by one    
                     E = self.remove_gate(index)
@@ -212,17 +237,7 @@ class Circuit:
                     # Add a check to make sure the gates are being generated correctly
                     #if abs(overlap_new) < abs(overlap_old):
                         #print("Error, overlap isn't increasing")
-            if optimizationnew is True:
-                eta = 0.5
-                for index in range(self.num_gates):
-                    E = self.remove_gate(index)
-                    U_old = self.gates[index]
-                    U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
-                    U_new = np.matmul(U,Vh).reshape(2,2,2,2)
-                    
-                    new_gate = U_old + eta * U_new
-                    # Replace gate
-                    self.gates[index] = U_new
+                                   
 
             overlaps.append(1-(abs(overlap_new)))
 
@@ -259,7 +274,7 @@ class Circuit:
       
         if show_overlap:
             
-            if overlap_change > min_overlap_change:
+            #if overlap_change > min_overlap_change:
     
                 print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
         # Find the final state of psi by applying the new gates
