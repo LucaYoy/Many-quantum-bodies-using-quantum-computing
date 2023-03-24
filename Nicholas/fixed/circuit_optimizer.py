@@ -2,17 +2,17 @@ import BrickWall as bw
 import matplotlib.pyplot as plt
 # To graph the overlap
 
-Qubits = 8
+Qubits = 4
 H = 1
 J = 1
-Layers = 3
+Layers = 5
 iterations = 1000
 for i in range(5):
     Circuit = bw.Circuit(Qubits, Layers, J ,H, gatesrandom=True)
     # Sweeps, Accuracy, ShowGraph?, ShowFinalOverlap?
     _,overlaps,_, iterations,_ = Circuit.optimize_circuit(iterations, 10**-12, show_overlap=True, 
                                                           stopped_flag=False
-                                                          , optimizationnew=True)
+                                                          , optimizationnew=False )
     
     flag = False
     for i in range(len(overlaps) -1, 0, -1):
