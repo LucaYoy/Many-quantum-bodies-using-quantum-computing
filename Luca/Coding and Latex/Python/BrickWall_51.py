@@ -71,28 +71,38 @@ class BrickWallCircuit:
 		E = np.tensordot(secondHalfCircuit.computeUsingTensorDot(MOriginal = self.M),firstHalfCircuit.computeUsingTensorDot(gatesWithQubitsIndices = firstHalfCircuit.gates),axes = (qubitsToContract,qubitsToContract)) #4 legs
 		return E, self.gates[indexOfGate] #return gate removed only for checking purposes
 
-	def optimize(self,psiTarget,minPerChange, maxCycles):
+	def optimize(self,psiTarget,minPerChange, maxCycles,GD=False):
 		cycles = 0
 		breakFlag = False
 		overlapArray = []
 		stoppingCriteria1Hit = False
 		stoppingCriteria2Hit = False
+		alpha = maxCycles/2
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
 			oldError = 1-oldOverlap
+			
+			if cycles<alpha:
+				eta = 0.05+((0.05-0.5)/alpha)*(cycles-alpha) #learning rate for GD decreasing linearly from (0,0.5) to (maxCycles/2,0.05)
+			else:
+				eta = 0.05
+
 			for indexLayer in range(self.M): #iterate through layers
 				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
 				for gateIndex in range(nrGatesOnLayer): #iterate through gates on that layer
 					E, gateRm = self.removeGate(psiTarget,indexLayer,gateIndex)
-					#E_new = gateRm + 0.015*E
 					W, sigma, Vdagger = np.linalg.svd(np.conjugate(E.reshape(4,4)))
 					newGate = np.matmul(W,Vdagger).reshape(2,2,2,2) #get the new gate that will maximize the fidelity
+					if GD:
+						newGate = gateRm + eta*newGate #GD method
+						W, sigma, Vdagger = np.linalg.svd(np.conjugate(newGate.reshape(4,4)))
+						newGate = np.matmul(W,Vdagger).reshape(2,2,2,2)
 
 					oldGateOverlap = np.abs(np.tensordot(E,gateRm,4)) #overap with old gate
 					newGateOverlap = np.abs(np.tensordot(E,newGate,4)) #overlap with new gate
 					#print(oldGateOverlap,newGateOverlap)
 
-					if newGateOverlap < oldGateOverlap and np.abs(newGateOverlap-oldGateOverlap)>10**(-6):
+					if not GD and newGateOverlap < oldGateOverlap and np.abs(newGateOverlap-oldGateOverlap)>10**(-6):
 						raise Exception(f'overlap decreased, something went wrong at cycle {cycles+1}')
 			
 					self.gates = [newGate if (gate == gateRm).all() else gate for gate in self.gates] #updates gates with the new gate added instead of old one

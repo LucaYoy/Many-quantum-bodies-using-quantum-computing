@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=defq
-#SBATCH --array=0,1
+#SBATCH --array=0-9
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=10g
@@ -16,8 +16,5 @@ source ~/.bashrc
 conda activate year4projenv
 
 TASK=${SLURM_ARRAY_TASK_ID}
-for i in {1..10}
-do 
-	python -u main.py $TASK
-done
+python -u main_RandomVsCloseToId.py $TASK
 echo "Finished job now"

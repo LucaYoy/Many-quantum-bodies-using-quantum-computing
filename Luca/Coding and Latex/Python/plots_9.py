@@ -112,37 +112,39 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 	ax.legend()
 	plt.show() 
 
-def plotOvelap_sweeps(psiTarget,j,h,g,approxStatesRand,approxStatesId,layers):
+def plotOvelap_sweeps(psiTarget,j,h,g,approxStates1,approxStates2,layers,GDvsPolar=False):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots(len(layers),2,layout='constrained')
+	if len(layers) == 1:
+		ax = np.array([ax])
 
-	for approxRBach,approxIdBach,layer in zip(approxStatesRand,approxStatesId,layers):
-		#layer = np.where(approxStatesRand==approxR)[0][0]+1
-		for  approxR,approxId in zip(approxRBach,approxIdBach):
-			overlapArray, criteria1, criteria2 = approxR
-			ax[layer-1,0].plot(range(1,len(overlapArray)+1),1-overlapArray, '-b')
+	for approx1Bach,approx2Bach,layer in zip(approxStates1,approxStates2,layers):
+		#layer = np.where(approxStates1==approxR)[0][0]+1
+		for  approx1,approx2 in zip(approx1Bach,approx2Bach):
+			overlapArray, criteria1, criteria2 = approx1
+			ax[layers.index(layer),0].plot(range(1,len(overlapArray)+1),1-overlapArray, '-b')
 			if criteria1!=None:	
-				ax[layer-1,0].plot(criteria1[0],1-criteria1[1],'xr')
+				ax[layers.index(layer),0].plot(criteria1[0],1-criteria1[1],'xr')
 			if criteria2!=None:	
-				ax[layer-1,0].plot(criteria2[0],1-criteria2[1],'xg')
-			ax[layer-1,0].set_yscale('log')
-			ax[layer-1,0].set_xscale('log')
-			ax[layer-1,0].set_ylabel('log(1-|Overlap|)')
-			ax[layer-1,0].set_xlabel('log(sweeps)')
+				ax[layers.index(layer),0].plot(criteria2[0],1-criteria2[1],'xg')
+			ax[layers.index(layer),0].set_yscale('log')
+			ax[layers.index(layer),0].set_xscale('log')
+			ax[layers.index(layer),0].set_ylabel('log(1-|Overlap|)')
+			ax[layers.index(layer),0].set_xlabel('log(sweeps)')
 
-			overlapArray, criteria1, criteria2 = approxId
-			ax[layer-1,1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
+			overlapArray, criteria1, criteria2 = approx2
+			ax[layers.index(layer),1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
 			if criteria1!=None:
-				ax[layer-1,1].plot(criteria1[0],1-criteria1[1],'xr')
+				ax[layers.index(layer),1].plot(criteria1[0],1-criteria1[1],'xr')
 			if criteria2!=None:
-				ax[layer-1,1].plot(criteria2[0],1-criteria2[1],'xg')
-			ax[layer-1,1].set_yscale('log')
-			ax[layer-1,1].set_xscale('log')
-			ax[layer-1,1].set_ylabel('log(1-|Overlap|)')
-			ax[layer-1,1].set_xlabel('log(sweeps)')
+				ax[layers.index(layer),1].plot(criteria2[0],1-criteria2[1],'xg')
+			ax[layers.index(layer),1].set_yscale('log')
+			ax[layers.index(layer),1].set_xscale('log')
+			ax[layers.index(layer),1].set_ylabel('log(1-|Overlap|)')
+			ax[layers.index(layer),1].set_xlabel('log(sweeps)')
 
-	ax[0,0].set_title('Random gates initialized')
-	ax[0,1].set_title('Close to Id gates initialized')
+	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
+	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
 	fig.set_size_inches(16,12)
-	fig.savefig(f'../plots/{N}qb_params{j}{h}{g}.png',format='png',dpi=100)
+	fig.savefig(f'../plots/GDvsPolar{N}{j}{h}{g}.png' if GDvsPolar else f'../plots/RandomVScloseToId{N}{j}{h}{g}.png',format='png',dpi=100)
 	plt.show()
