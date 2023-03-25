@@ -16,5 +16,8 @@ source ~/.bashrc
 conda activate year4projenv
 
 TASK=${SLURM_ARRAY_TASK_ID}
-python -u main.py $TASK
+for i in {1..10}
+do 
+	python -u main.py $TASK
+done
 echo "Finished job now"

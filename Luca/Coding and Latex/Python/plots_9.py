@@ -4,25 +4,24 @@ import ExactDiag_21 as ed
 import Entropy as en
 import matplotlib.pyplot as plt
 
-N = 6
-j,h = 1,1
-exactD = ed.exactDiag(N, j, h)
-psiTarget = exactD[2].reshape(tuple([2]*N))
-exactE = exactD[1]
-H = exactD[0]
+# N = 6
+# j,h = 1,1
+# exactD = ed.exactDiag(N, j, h)
+# psiTarget = exactD[2].reshape(tuple([2]*N))
+# exactE = exactD[1]
+# H = exactD[0]
 
-def plotEnergy(psiTarget,exactE,H,maxLayers):
+def plotEnergy(psiTarget,approxStates,exactE,H):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
-	x = range(1,maxLayers+1)
-	ax.plot([1,maxLayers],[exactE,exactE],'--k',label='Exact')
+	x = range(1,len(approxStates)+1)
+	ax.plot([1,len(approxStates)],[exactE,exactE],'--k',label='Exact')
 	ax.set_xlabel('Layers')
 	ax.set_ylabel('Energy')
 	E = []
 
-	for layer in x:
-		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
+	for approx in approxStates:
+		approx = approx.flatten()
 		E.append(np.vdot(approx,np.matmul(H,approx)))
 
 	ax.plot(x,E,'o-',label='Approximation')
@@ -30,18 +29,17 @@ def plotEnergy(psiTarget,exactE,H,maxLayers):
 	fig.savefig('../plots/energyPlot.png',format='png')
 	plt.show()
 
-def plotOvelap(psiTarget,maxLayers):
+def plotOvelap(psiTarget,approxStates):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
-	x = range(1,maxLayers+1)
-	ax.plot([1,maxLayers],[0,0],'--k',label='Exact')
+	x = range(1,len(approxStates)+1)
+	ax.plot([1,len(approxStates)],[0,0],'--k',label='Exact')
 	ax.set_xlabel('Layers')
 	ax.set_ylabel('1-|Overlap|')
 	overlap = []
 
-	for layer in x:
-		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000*layer).flatten()
+	for approx in approxStates:
+		approx = approx.flatten()
 		overlap.append(np.abs(np.vdot(approx,psiTarget.flatten())))
 
 	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
@@ -49,7 +47,7 @@ def plotOvelap(psiTarget,maxLayers):
 	fig.savefig('../plots/overlapPlot.png',format='png')
 	plt.show()
 
-def plotS(psiTarget,layers):
+def plotS(psiTarget,approxStates,layers):
 	N = len(psiTarget.shape)
 	bond = range(N+1)
 	fig, ax = plt.subplots()
@@ -58,22 +56,18 @@ def plotS(psiTarget,layers):
 	ax.set_xlabel('i bond')
 	ax.set_ylabel('Entropy')
 
-	for layer in layers:
-		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
-
+	for approx,layer in zip(approxStates,layers):
 		enApprox = [en.S(range(1,i+1), approx) for i in bond]
-
-		ax.plot(bond,enApprox,'o-', label=f'{layer} Layers')
+		ax.plot(bond,enApprox,'o-',label=f'{layer} Layers')
 
 
 	ax.legend()
 	fig.savefig('../plots/entropyPlots.png',format='png')
 	plt.show()
 
-def plotMatrixI(psiTarget,layers):
+def plotMatrixI(psiTarget,approxStates,layers):
 	N = len(psiTarget.shape)
-	fig , axs = plt.subplots(1,len(layers)+1,layout='constrained')
+	fig , axs = plt.subplots(1,len(approxStates)+1,layout='constrained')
 	alpha = ['']+list(range(1,N+1))
 
 	exact = en.matrixI(psiTarget)
@@ -85,9 +79,7 @@ def plotMatrixI(psiTarget,layers):
 	axs[0].set_yticklabels(alpha)
 	axs[0].set_title(f'Exact', weight='bold')
 
-	for layer in layers:
-		circuit = bw.BrickWallCircuit(8, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
+	for approx,layer in zip(approxStates,layers):
 		matrixApprox = en.matrixI(approx) 
 
 		axs[layer].matshow(matrixApprox,cmap=plt.cm.Oranges)
@@ -99,7 +91,7 @@ def plotMatrixI(psiTarget,layers):
 	fig.savefig('../plots/matrixCmPlots.png',format='png')
 	plt.show()
 
-def plotJ(psiTarget,layers,log=False):
+def plotJ(psiTarget,approxStates,layers,log=False):
 	N = len(psiTarget.shape)
 	fig, ax  = plt.subplots()
 	d = np.array(range(1,N))
@@ -115,9 +107,7 @@ def plotJ(psiTarget,layers,log=False):
 		ax.set_xlabel('d')
 		ax.set_ylabel('J')
 
-	for layer in layers:
-		circuit = bw.BrickWallCircuit(N, layer)
-		approx = circuit.optimize(psiTarget,0.00001,1000*layer)
+	for approx,layer in zip(approxStates,layers):
 		approxJ = np.array([en.J(dist, approx) for dist in d])
 
 		ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
@@ -129,14 +119,14 @@ def plotJ(psiTarget,layers,log=False):
 	ax.legend()
 	plt.show() 
 
-def plotOvelap_sweeps(psiTarget,j,h,layers,maxIterations,runs):
+def plotOvelap_sweeps(psiTarget,j,h,approxStatesRand,approxStatesId,layers):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots(len(layers),2,layout='constrained')
 
-	for layer in layers:
-		for  i in range(runs):
-			circuit = bw.BrickWallCircuit(N, layer,gatesRandomFlag=True)
-			overlapArray, criteria1, criteria2 = circuit.optimize(psiTarget, 0.001, maxIterations)[1:]
+	for approxRBach,approxIdBach,layer in zip(approxStatesRand,approxStatesId,layers):
+		#layer = np.where(approxStatesRand==approxR)[0][0]+1
+		for  approxR,approxId in zip(approxRBach,approxIdBach):
+			overlapArray, criteria1, criteria2 = approxR
 			ax[layer-1,0].plot(range(1,len(overlapArray)+1),1-overlapArray, '-b')
 			if criteria1!=None:	
 				ax[layer-1,0].plot(criteria1[0],1-criteria1[1],'xr')
@@ -147,8 +137,7 @@ def plotOvelap_sweeps(psiTarget,j,h,layers,maxIterations,runs):
 			ax[layer-1,0].set_ylabel('log(1-|Overlap|)')
 			ax[layer-1,0].set_xlabel('log(sweeps)')
 
-			circuit = bw.BrickWallCircuit(N, layer)
-			overlapArray, criteria1, criteria2 = circuit.optimize(psiTarget, 0.001, maxIterations)[1:]
+			overlapArray, criteria1, criteria2 = approxId
 			ax[layer-1,1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
 			if criteria1!=None:
 				ax[layer-1,1].plot(criteria1[0],1-criteria1[1],'xr')
@@ -171,4 +160,4 @@ def plotOvelap_sweeps(psiTarget,j,h,layers,maxIterations,runs):
 #plotJ(psiTarget, [1,2,3],True)
 #plotEnergy(psiTarget, exactE, H, 10)
 #plotOvelap(psiTarget, 10)
-plotOvelap_sweeps(psiTarget,j,h, [1,2,3], 300, 10)
+#plotOvelap_sweeps(psiTarget,j,h, [1,2,3], 300, 10)
