@@ -4,14 +4,7 @@ import ExactDiag_21 as ed
 import Entropy as en
 import matplotlib.pyplot as plt
 
-# N = 6
-# j,h = 1,1
-# exactD = ed.exactDiag(N, j, h)
-# psiTarget = exactD[2].reshape(tuple([2]*N))
-# exactE = exactD[1]
-# H = exactD[0]
-
-def plotEnergy(psiTarget,approxStates,exactE,H):
+def plotEnergy(psiTarget,j,h,g,approxStates,exactE,H):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
 	x = range(1,len(approxStates)+1)
@@ -26,10 +19,10 @@ def plotEnergy(psiTarget,approxStates,exactE,H):
 
 	ax.plot(x,E,'o-',label='Approximation')
 	ax.legend()
-	fig.savefig('../plots/energyPlot.png',format='png')
+	fig.savefig(f'../plots/energyPlot{N}{j}{h}{g}{len(approxStates)}.png',format='png')
 	plt.show()
 
-def plotOvelap(psiTarget,approxStates):
+def plotOvelap(psiTarget,j,h,g,approxStates):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
 	x = range(1,len(approxStates)+1)
@@ -44,10 +37,10 @@ def plotOvelap(psiTarget,approxStates):
 
 	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
 	ax.legend()
-	fig.savefig('../plots/overlapPlot.png',format='png')
+	fig.savefig(f'../plots/overlapPlot{N}{j}{h}{g}{len(approxStates)}.png',format='png')
 	plt.show()
 
-def plotS(psiTarget,approxStates,layers):
+def plotS(psiTarget,j,h,g,approxStates,layers):
 	N = len(psiTarget.shape)
 	bond = range(N+1)
 	fig, ax = plt.subplots()
@@ -62,10 +55,10 @@ def plotS(psiTarget,approxStates,layers):
 
 
 	ax.legend()
-	fig.savefig('../plots/entropyPlots.png',format='png')
+	fig.savefig(f'../plots/entropyPlots{N}{j}{h}{g}.png',format='png')
 	plt.show()
 
-def plotMatrixI(psiTarget,approxStates,layers):
+def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
 	N = len(psiTarget.shape)
 	fig , axs = plt.subplots(1,len(approxStates)+1,layout='constrained')
 	alpha = ['']+list(range(1,N+1))
@@ -88,10 +81,10 @@ def plotMatrixI(psiTarget,approxStates,layers):
 		axs[layer].set_yticklabels([])
 
 	fig.colorbar(cax,location='left')
-	fig.savefig('../plots/matrixCmPlots.png',format='png')
+	fig.savefig(f'../plots/matrixCmPlots{N}{j}{h}{g}.png',format='png')
 	plt.show()
 
-def plotJ(psiTarget,approxStates,layers,log=False):
+def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 	N = len(psiTarget.shape)
 	fig, ax  = plt.subplots()
 	d = np.array(range(1,N))
@@ -115,11 +108,11 @@ def plotJ(psiTarget,approxStates,layers,log=False):
 			ax.set_yscale('log')
 			ax.set_xscale('log')	
 
-	fig.savefig('../plots/JPlots.png',format='png')
+	fig.savefig(f'../plots/JPlots{N}{j}{h}{g}.png',format='png')
 	ax.legend()
 	plt.show() 
 
-def plotOvelap_sweeps(psiTarget,j,h,approxStatesRand,approxStatesId,layers):
+def plotOvelap_sweeps(psiTarget,j,h,g,approxStatesRand,approxStatesId,layers):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots(len(layers),2,layout='constrained')
 
@@ -151,13 +144,5 @@ def plotOvelap_sweeps(psiTarget,j,h,approxStatesRand,approxStatesId,layers):
 	ax[0,0].set_title('Random gates initialized')
 	ax[0,1].set_title('Close to Id gates initialized')
 	fig.set_size_inches(16,12)
-	fig.savefig(f'../plots/{N}qb_params{j}{h}.png',format='png',dpi=100)
+	fig.savefig(f'../plots/{N}qb_params{j}{h}{g}.png',format='png',dpi=100)
 	plt.show()
-
-
-#plotS(psiTarget,[1,2,3])
-#plotMatrixI(psiTarget, [1,2,3])
-#plotJ(psiTarget, [1,2,3],True)
-#plotEnergy(psiTarget, exactE, H, 10)
-#plotOvelap(psiTarget, 10)
-#plotOvelap_sweeps(psiTarget,j,h, [1,2,3], 300, 10)
