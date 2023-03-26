@@ -112,8 +112,7 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 	ax.legend()
 	plt.show() 
 
-def plotOvelap_sweeps(psiTarget,j,h,g,approxStates1,approxStates2,layers,GDvsPolar=False):
-	N = len(psiTarget.shape)
+def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=False):
 	fig, ax = plt.subplots(len(layers),2,layout='constrained')
 	if len(layers) == 1:
 		ax = np.array([ax])
@@ -148,3 +147,31 @@ def plotOvelap_sweeps(psiTarget,j,h,g,approxStates1,approxStates2,layers,GDvsPol
 	fig.set_size_inches(16,12)
 	fig.savefig(f'../plots/GDvsPolar{N}{j}{h}{g}.png' if GDvsPolar else f'../plots/RandomVScloseToId{N}{j}{h}{g}.png',format='png',dpi=100)
 	plt.show()
+
+def plotOvelap_sweeps2(approxStates,comapringDict):
+	fig, ax = plt.subplots(1,len(approxStates),layout='constrained')
+
+	for i in range(len(approxStates)):
+		overlapArray, criteria1, criteria2 = approxStates[i]
+		ax[i].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
+		if arrayOfCriteria1[i]!=None:	
+			ax[i].plot(criteria1[0],1-criteria1[1],'xr')
+		if arrayOfCriteria2[i]!=None:	
+			ax[i].plot(criteria2[0],1-criteria2[1],'xg')
+		ax[i].set_yscale('log')
+		ax[i].set_xscale('log')
+		ax[i].set_ylabel('log(1-|Overlap|)')
+		ax[i].set_xlabel('log(sweeps)')
+
+	for i in range(len(approxStates)):
+		ax[i].set_title(f"{comapringDict['type']} {comapringDict['items'][i]}")
+
+
+	plt.show()
+	fig.set_size_inches(16,12)
+	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}{comapringDict['fixed'][1]}.png'",format='png',dpi=100)
+	
+
+
+
+

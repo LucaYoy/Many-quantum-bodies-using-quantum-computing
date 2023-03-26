@@ -16,10 +16,7 @@ param = parameters[which]
 N,j,h,M,g,maxIterations,run = param.values()
 psiTarget = ed.exactDiag(N,j,h,g)[2].reshape(tuple([2]*N))
 
-approxStateRand = bw.BrickWallCircuit(N,M,gatesRandomFlag=True).optimize(psiTarget, 0.0001, maxIterations,GD=False)[1:]
-approxStateId = bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, maxIterations,GD=False)[1:]
+approxStateGD = bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, maxIterations,GD=True)[1:]
 
-with open(f'approxStateRand{run}.pkl','wb') as f:
-	pickle.dump(approxStateRand,f)
-with open(f'approxStateId{run}.pkl','wb') as f:
-	pickle.dump(approxStateId,f)
+with open(f'approxStateGD{run}.pkl','wb') as f:
+	pickle.dump(approxStateGD,f)
