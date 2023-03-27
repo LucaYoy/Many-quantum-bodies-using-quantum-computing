@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import BrickWall_51 as bw
-import ExactDiag_21 as ed
+import ExactDiag_adam as ed
 #import plots_9 as plts
 import pickle
 #import Entropy as en
@@ -13,8 +13,9 @@ which = int(sys.argv[1])
 parameters = [{'N':14,'j':1,'h':1,'g':0,'M':5,'maxIterations':20000},{'N':14,'j':1,'h':1.5,'g':0,'M':5,'maxIterations':20000},{'N':14,'j':1,'h':1,'g':1,'M':5,'maxIterations':20000}]
 param = parameters[which]
 
-N,j,h,M,g,maxIterations = param.values()
-psiTarget = ed.exactDiag(N,j,h,g)[2].reshape(tuple([2]*N))
+N,j,h,g,M,maxIterations = 14,1,param['h'],param['g'],5,20000
+
+psiTarget = ed.exactDiagSparse(N,j,h,g)[2].reshape(tuple([2]*N))
 
 approxStateModel = bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, maxIterations,GD=True)[1:]
 

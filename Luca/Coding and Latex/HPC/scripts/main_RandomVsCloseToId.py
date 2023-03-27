@@ -11,12 +11,12 @@ import psutil
 process = psutil.Process() # get current process to check memory usage
 
 #sh file array 0-9
-which = int(sys.argv[1])-1  # -1 because array starts at 0
+which = int(sys.argv[1])
 
-parameters = [{'N':14,'j':1,'h':1,'g':1,'M':5,'maxIterations':200,'run':i} for i in range(1,11)]
-param = parameters[which]
+# parameters = [{'N':14,'j':1,'h':1,'g':1,'M':5,'maxIterations':200,'run':i} for i in range(1,11)]
+# param = parameters[which]
 
-N,j,h,M,g,maxIterations,run = param.values()
+N,j,h,g,M,maxIterations,run = 14,1,1,1,5,20000,which+1
 
 psiTarget = ed.exactDiagSparse(N,j,h,g)[2].reshape(tuple([2]*N))
 

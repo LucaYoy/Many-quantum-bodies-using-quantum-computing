@@ -1,6 +1,6 @@
 import numpy as np
 import BrickWall_51 as bw
-import ExactDiag_21 as ed
+import ExactDiag_adam as ed
 import Entropy as en
 import plots_9 as plts
 import pickle
@@ -10,7 +10,7 @@ N = 12
 jA,hA,gA = 1,1,0 #integrable not at phase transition
 jB,hB,gB = 1,1.5,0 #integrable at phase transition
 jC,hC,gC = 1,1,1 #general non integrable
-exactD = ed.exactDiag(N, jC, hC,gC)
+exactD = ed.exactDiagSparse(N, jC, hC,gC)
 psiTarget = exactD[2].reshape(tuple([2]*N))
 exactE = exactD[1]
 H = exactD[0]
