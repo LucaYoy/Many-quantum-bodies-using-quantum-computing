@@ -14,7 +14,7 @@ class Circuit:
 
     """
 
-    def __init__(self,n, m, J, h, gates=None, gatesrandom=False):
+    def __init__(self,n, m, J, h, G, gates=None, gatesrandom=False):
         self.n = n # Number of qubits
         self.m = m # Number of layers
         self.num_gates = int(np.floor(n/2) * np.ceil(m/2) + np.floor((n-1)/2) * np.floor(m/2))
@@ -24,7 +24,7 @@ class Circuit:
         self.psi[0] = 1
         self.psi = self.psi.reshape(tuple([2]*n)) # Define initial psi
         
-        self.phi = ed.exactDiagonalization(n, J, h)[1] # Define target state
+        self.phi = ed.exactDiagSparse(n, J, h, G)[1] # Define target state
         
         self.left = self.psi.copy()  # current state of left half of circuit
         self.right = self.phi.copy()  # current state of right half of circuit
@@ -190,10 +190,18 @@ class Circuit:
         relative_overlap_changes = []
         iterations = 0
         overlap_change = float('inf') 
-                           
+        #eta_array = []
+        eta = 0.2
+        decay = 0.65                 
         for i in range(max_iterations):    
             if optimizationnew:
-                eta = 0.1
+                if i < max_iterations // 2:
+                    if i % (max_iterations // 40) == 0:
+                        eta *= decay
+                        #eta_array.append(eta)
+                else:
+                    eta = 0.05
+                    #eta_array.append(eta)
                 for index in range(self.num_gates):
                     # Remove each gate one by one
                     E = self.remove_gate(index)
@@ -204,7 +212,7 @@ class Circuit:
                     U_old = self.gates[index]
                     U,s,Vh = np.linalg.svd(np.conjugate(E.reshape(4,4)))
                     U_new = np.matmul(U,Vh).reshape(2,2,2,2)
-                    
+                    #print(f"eta = {eta}")
                     new_gate = U_old + eta * U_new
                     # Once again perform SVD on this new gate to get a unitary
                     U,s,Vh = np.linalg.svd(np.conjugate(new_gate.reshape(4,4)))
@@ -250,36 +258,22 @@ class Circuit:
                 relative_overlap_changes.append(relative_overlap_change)
             if show_overlap:
                 if not stopped_flag and relative_overlap_change < min_overlap_change:
-        # Plot a red x and label it on the graph
-                    plt.plot(iterations, overlaps[-1], 'rx')#, label="Stopped")
+                    # Plot a red x and label it on the graph
+                    plt.plot(iterations, overlaps[-1], 'rx')
                     
-        # Set the flag to True to indicate that the condition has been met once
+                    # Set the flag to True to indicate that the condition has been met once
                     stopped_flag = True
                   
                     print(f"Stopped after iteration {iterations} with final overlap {overlaps[-1]}")
-                     
-            
-            # Plot the overlap against the number of iterations (optional)
-            #if plot:
-            #    plt.plot(range(iterations+1), overlaps)#, label="Approximation")
-            #    plt.xlabel("Number of iterations")
-            #    plt.ylabel("1 - Overlap")
-                #plt.axhline(y=0, color='k', linestyle='dashed')#, label="Exact")
-            #    plt.xscale("log")
-            #    plt.yscale("log")
-                #plt.legend()
-                #plt.show()
-        
+
             iterations += 1
       
         if show_overlap:
-            
-            #if overlap_change > min_overlap_change:
-    
-                print(f"Stopped after {iterations} iterations, with final overlap {overlaps[-1]}")  
+            if not stopped_flag:
+                print(f"Stopped after iteration {iterations}, with final overlap {overlaps[-1]}") 
         # Find the final state of psi by applying the new gates
         final_psi = self.brick_wall()
                               
-        return relative_errors, overlaps, final_psi, iterations, relative_overlap_changes
+        return relative_errors, overlaps, final_psi, iterations, relative_overlap_changes, self.gates
         
     

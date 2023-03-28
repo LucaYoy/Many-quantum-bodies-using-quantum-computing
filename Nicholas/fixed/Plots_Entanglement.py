@@ -13,8 +13,9 @@ import matplotlib.pyplot as plt
 Qubits = 8
 J = 1
 H = 1.5
+G = 0
 
-phi = ed.exactDiagonalization(Qubits, J, H)[1]
+phi = ed.exactDiagonalization(Qubits, J, H, G)[1]
 
 entropies_exact = []
 
@@ -26,7 +27,7 @@ for i in range(0, len(phi.shape)+1):
     
 for Layers in range(1,4):
     entropies = []
-    Circuit = bw.Circuit(Qubits, Layers, J, H)
+    Circuit = bw.Circuit(Qubits, Layers, J, H, G)
     psi=Circuit.optimize_circuit(100,10**-12, True, True, True)[2]
     
     for i in range(0, len(psi.shape)+1):

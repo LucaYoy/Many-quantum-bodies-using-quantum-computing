@@ -10,16 +10,14 @@ import sys
 
 which = int(sys.argv[1])
 
-parameters = [{'n':6, 'J':1, 'h':1,'m':3, 'iterations':1000, 'runs':10},
-              {'n':6, 'J':1, 'h':1.5,'m':3, 'iterations':1000, 'runs':10}]
-
+parameters = [{'n':8, 'J':1, 'h':1,'m':5, 'iterations':1000, 'runs':3},{'n':8, 'J':1, 'h':1,'m':5, 'iterations':1000, 'runs':3}]
 param = parameters[which]
 
 n, J, h, m, iterations, runs = param.values()
-overlaps = op.overlap(n, m, J, h, iterations, runs)
 
-# Open a new text file for writing
-with open('overlaps.txt', 'w') as f:
-    # Loop over the list of overlaps and write each one to a new line in the file
-    for i, overlap in enumerate(overlaps):
-        f.write(f"Overlap {i+1}: {overlap}\n")
+for i in range(runs):
+	overlaps, gates = op.overlap(n, m, J, h, iterations, runs)
+
+	with open(f'overlaps_n={n}_J={J}_h={h}_m={m}.txt', 'w') as f:
+    		for j, overlap in enumerate(overlaps):
+        		f.write(f"Run {j+1}: {overlap}\n")
