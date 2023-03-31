@@ -106,8 +106,8 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 			ax.set_yscale('log')
 			ax.set_xscale('log')	
 
-	fig.savefig(f'../plots/JPlots{N}_{j}{h}{g}.png',format='png')
 	ax.legend()
+	fig.savefig(f'../plots/JPlots{N}_{j}{h}{g}log={log}.png',format='png')
 	plt.show() 
 
 def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=False):
@@ -168,8 +168,24 @@ def plotOvelap_sweeps2(approxStates,comapringDict):
 	plt.show()
 	fig.set_size_inches(16,12)
 	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.png",format='png',dpi=100)
+
+def plotOvelap_sweeps3(approxState,i=''):
+	fig,ax = plt.subplots()
+
+	overlapArray, criteria1, criteria2 = approxState
+	ax.plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
+	if criteria1!=None:	
+		ax.plot(criteria1[0],1-criteria1[1],'xr')
+	if criteria2!=None:	
+		ax.plot(criteria2[0],1-criteria2[1],'xg')
+	ax.set_yscale('log')
+	ax.set_xscale('log')
+	ax.set_ylabel('log(1-|Overlap|)')
+	ax.set_xlabel('log(sweeps)')
 	
 
-
+	plt.show()
+	fig.set_size_inches(16,12)
+	fig.savefig(f'../plots/PlotTesting{i}.png',format='png',dpi=100)
 
 

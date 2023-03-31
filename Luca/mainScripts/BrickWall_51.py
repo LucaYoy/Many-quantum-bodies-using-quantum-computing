@@ -77,15 +77,18 @@ class BrickWallCircuit:
 		overlapArray = []
 		stoppingCriteria1Hit = False
 		stoppingCriteria2Hit = False
-		alpha = maxCycles/2
+		alpha = maxCycles//4
+		etaInit = 0.3
+		etaFinal = 0.05
+		eta = etaInit
 		while True: #keep going through cycles until desired accuracy is reached, this simulates a do-while loop
 			oldOverlap = np.abs(np.tensordot(self.computeUsingTensorDot(),np.conjugate(psiTarget),self.N))
 			oldError = 1-oldOverlap
 			
-			if cycles<alpha:
-				eta = 0.05+((0.05-0.5)/alpha)*(cycles-alpha) #learning rate for GD decreasing linearly from (0,0.5) to (maxCycles/2,0.05)
-			else:
-				eta = 0.05
+			# if cycles<alpha:
+			# 	eta = etaFinal+((etaFinal-etaInit)/alpha)*(cycles-alpha) #learning rate for GD decreasing linearly from (0,0.5) to (maxCycles/2,0.05)
+			# else:
+			# 	eta = etaFinal
 
 			for indexLayer in range(self.M): #iterate through layers
 				nrGatesOnLayer = int(np.floor((self.N-indexLayer%2)/2))
