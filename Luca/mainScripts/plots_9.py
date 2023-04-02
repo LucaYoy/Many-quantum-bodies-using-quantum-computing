@@ -100,7 +100,9 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 
 	for approx,layer in zip(approxStates,layers):
 		approxJ = np.array([en.J(dist, approx) for dist in d])
-
+		if log:
+			approxJ[np.abs(approxJ)<10**-12] = None
+		print(approxJ)
 		ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
 		if log:
 			ax.set_yscale('log')
@@ -142,7 +144,7 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 
 	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
 	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
-	fig.set_size_inches(16,12)
+	fig.set_size_inches(12,8)
 	fig.savefig(f'../plots/GDvsPolar{N}_{j}{h}{g}.png' if GDvsPolar else f'../plots/RandomVScloseToId{N}_{j}{h}{g}.png',format='png',dpi=100)
 	plt.show()
 

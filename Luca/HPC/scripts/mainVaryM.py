@@ -10,13 +10,13 @@ import pickle
 #sh file array 0-3
 which = int(sys.argv[1])
 
-parameters = [{'N':14,'j':1,'h':1,'g':1,'M':3,'maxIterations':20000},{'N':14,'j':1,'h':1,'g':1,'M':4,'maxIterations':20000},{'N':14,'j':1,'h':1,'g':1,'M':6,'maxIterations':20000},{'N':14,'j':1,'h':1,'g':1,'M':7,'maxIterations':20000}]
+parameters = [{'M':3,},{'M':4},{'M':6},{'M':7}]
 param = parameters[which]
 
-N,j,h,g,M,maxIterations,run = 14,1,1,1,param['M'],20000
+N,j,h,g,M,maxIterations = 14,1,1,1,param['M'],100000
 psiTarget = ed.exactDiagSparse(N,j,h,g)[2].reshape(tuple([2]*N))
 
-approxStateM = bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, maxIterations,GD=True)[1:]
+approxStateM = bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, maxIterations,GD=False)[1:]
 
-with open(f'approxStateM{M}.pkl','wb') as f:
+with open(f'approxStateM{M}_Polar.pkl','wb') as f:
 	pickle.dump(approxStateM,f)
