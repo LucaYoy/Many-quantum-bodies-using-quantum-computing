@@ -17,7 +17,7 @@ def plotEnergy(psiTarget,j,h,g,approxStates,exactE,H):
 
 	ax.plot(x,E,'o-',label='Approximation')
 	ax.legend()
-	fig.savefig(f'../plots/energyPlot{N}_{j}{h}{g}{len(approxStates)}.png',format='png')
+	fig.savefig(f'../plots/energyPlot{N}_{j}{h}{g}_{len(approxStates)}.pdf',format='pdf')
 	plt.show()
 
 def plotOvelap(psiTarget,j,h,g,approxStates):
@@ -35,7 +35,7 @@ def plotOvelap(psiTarget,j,h,g,approxStates):
 
 	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
 	ax.legend()
-	fig.savefig(f'../plots/overlapPlot{N}_{j}{h}{g}{len(approxStates)}.png',format='png')
+	fig.savefig(f'../plots/overlapPlot{N}_{j}{h}{g}_{len(approxStates)}.pdf',format='pdf')
 	plt.show()
 
 def plotS(psiTarget,j,h,g,approxStates,layers):
@@ -53,7 +53,7 @@ def plotS(psiTarget,j,h,g,approxStates,layers):
 
 
 	ax.legend()
-	fig.savefig(f'../plots/entropyPlots{N}_{j}{h}{g}.png',format='png')
+	fig.savefig(f'../plots/entropyPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
 def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
@@ -79,7 +79,7 @@ def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
 		axs[layer].set_yticklabels([])
 
 	fig.colorbar(cax,location='left')
-	fig.savefig(f'../plots/matrixCmPlots{N}_{j}{h}{g}.png',format='png')
+	fig.savefig(f'../plots/matrixCmPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
 def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
@@ -109,7 +109,7 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 			ax.set_xscale('log')	
 
 	ax.legend()
-	fig.savefig(f'../plots/JPlots{N}_{j}{h}{g}log={log}.png',format='png')
+	fig.savefig(f'../plots/JPlots{N}_{j}{h}{g}log={log}.pdf',format='pdf')
 	plt.show() 
 
 def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=False):
@@ -145,7 +145,7 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
 	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
 	fig.set_size_inches(12,8)
-	fig.savefig(f'../plots/GDvsPolar{N}_{j}{h}{g}.png' if GDvsPolar else f'../plots/RandomVScloseToId{N}_{j}{h}{g}.png',format='png',dpi=100)
+	fig.savefig(f'../plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 	plt.show()
 
 def plotOvelap_sweeps2(approxStates,comapringDict):
@@ -169,7 +169,7 @@ def plotOvelap_sweeps2(approxStates,comapringDict):
 
 	plt.show()
 	fig.set_size_inches(16,12)
-	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.png",format='png',dpi=100)
+	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.pdf",format='pdf',dpi=100)
 
 def plotOvelap_sweeps3(approxState,i=''):
 	fig,ax = plt.subplots()
@@ -188,6 +188,6 @@ def plotOvelap_sweeps3(approxState,i=''):
 
 	plt.show()
 	fig.set_size_inches(16,12)
-	fig.savefig(f'../plots/PlotTesting{i}.png',format='png',dpi=100)
+	fig.savefig(f'../plots/PlotTesting{i}.pdf',format='pdf',dpi=100)
 
 

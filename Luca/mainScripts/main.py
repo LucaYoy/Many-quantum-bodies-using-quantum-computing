@@ -3,27 +3,31 @@ import BrickWall_51 as bw
 import ExactDiag_adam as ed
 import plots_9 as plts
 import pickle
+import sys
 
-N = 8
+N = 6
 jA,hA,gA = 1,1,0 #integrable not at phase transition
 jB,hB,gB = 1,1.5,0 #integrable at phase transition
 jC,hC,gC = 1,1,1 #general non integrable
-exactD = ed.exactDiagSparse(N, jC, hC,gC)
+exactD = ed.exactDiagSparse(N, jB, hB,gB)
 psiTarget = exactD[2].reshape(tuple([2]*N))
 exactE = exactD[1]
-H = exactD[0]
+H = np.array(exactD[0].todense())
 layers = [1,2,3]
 
 #Testing
-# circuit = bw.BrickWallCircuit(N,5, gatesRandomFlag=False)
-# approxState = circuit.optimize(psiTarget,0.0001,5000,GD=True)[1:]
-# plts.plotOvelap_sweeps3(approxState,'0.5_8_5_5000_GD_Nich')
+# circuit = bw.BrickWallCircuit(N,3, gatesRandomFlag=False)
+# circuitOpt = circuit.optimize(psiTarget,0.0001,5000,GD=True)[0]
+# print(sys.getsizeof(circuit))
+# print(sys.getsizeof(circuitOpt.computeUsingTensorDot()))
+# print(sys.getsizeof(circuitOpt))
+#plts.plotOvelap_sweeps3(approxState,'0.5_8_5_5000_GD_Nich')
 
 # plotting correlation functions
-#approxStates = [bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, 5000,GD=False)[0] for M in layers]
+#approxStates = [bw.BrickWallCircuit(N,M,gatesRandomFlag=False).optimize(psiTarget, 0.0001, 5000,GD=False)[0].computeUsingTensorDot() for M in layers]
 # plts.plotEnergy(psiTarget,jB,hB,gB,approxStates, exactE, H)
 # plts.plotOvelap(psiTarget,jB,hB,gB,approxStates)
-# plts.plotS(psiTarget,jB,hB,gB,approxStates,layers)
+#plts.plotS(psiTarget,jB,hB,gB,approxStates,layers)
 # plts.plotMatrixI(psiTarget,jB,hB,gB,approxStates,layers)
 # plts.plotJ(psiTarget,jB,hB,gB,approxStates,layers)
 #plts.plotJ(psiTarget,jB,hB,gB,approxStates,layers,log=True)
@@ -43,9 +47,9 @@ layers = [1,2,3]
 # approxStatesId = []
 # approxStatesGD = []
 # approxStatesP = []
-approxStatesModel = []
-approxStatesM = []
-approxStatesN = []
+# approxStatesModel = []
+# approxStatesM = []
+# approxStatesN = []
 
 #for i in range(1,11):
 	# with open(f'approxStateRand{i}.pkl','rb') as f:
@@ -63,37 +67,37 @@ approxStatesN = []
 # approxStatesP = [approxStatesP]
 # approxStatesM.insert(2,approxStatesGD[0][0])
 
-with open(f'pklFiles/approxStateModel110_Polar.pkl','rb') as f:
-		approxStatesModel.append(pickle.load(f))
-with open(f'pklFiles/approxStateModel11.50_Polar.pkl','rb') as f:
-		approxStatesModel.append(pickle.load(f))
-with open(f'pklFiles/approxStateModel111_Polar.pkl','rb') as f:
-		approxStatesModel.append(pickle.load(f))
+# with open(f'pklFiles/approxStateModel110_Polar.pkl','rb') as f:
+# 		approxStatesModel.append(pickle.load(f))
+# with open(f'pklFiles/approxStateModel11.50_Polar.pkl','rb') as f:
+# 		approxStatesModel.append(pickle.load(f))
+# with open(f'pklFiles/approxStateModel111_Polar.pkl','rb') as f:
+# 		approxStatesModel.append(pickle.load(f))
 	
-for i in [3,4,6,7]:
-	with open(f'pklFiles/approxStateM{i}_Polar.pkl','rb') as f:
-		approxStatesM.append(pickle.load(f))
-approxStatesM.insert(2,approxStatesModel[2])
+# for i in [3,4,6,7]:
+# 	with open(f'pklFiles/approxStateM{i}_Polar.pkl','rb') as f:
+# 		approxStatesM.append(pickle.load(f))
+# approxStatesM.insert(2,approxStatesModel[2])
 
-with open(f'pklFiles/approxStateN8_Polar.pkl','rb') as f:
-		approxStatesN.append(pickle.load(f))
-with open(f'pklFiles/approxStateN10_Polar.pkl','rb') as f:
-		approxStatesN.append(pickle.load(f))
-with open(f'pklFiles/approxStateN12_Polar.pkl','rb') as f:
-		approxStatesN.append(pickle.load(f))
-approxStatesN.append(approxStatesModel[2])
+# with open(f'pklFiles/approxStateN8_Polar.pkl','rb') as f:
+# 		approxStatesN.append(pickle.load(f))
+# with open(f'pklFiles/approxStateN10_Polar.pkl','rb') as f:
+# 		approxStatesN.append(pickle.load(f))
+# with open(f'pklFiles/approxStateN12_Polar.pkl','rb') as f:
+# 		approxStatesN.append(pickle.load(f))
+# approxStatesN.append(approxStatesModel[2])
 
-compareModelSig = {'type':'Models','items':['A','B','C'],'fixed':[14,5],'optimization':'Polar'}
-compareNSig = {'type':'N','items':[8,10,12,14],'fixed':[111,5],'optimization':'Polar'}
-compareMSig = {'type':'M','items':[3,4,5,6,7],'fixed':[111,14],'optimization':'Polar'}
+# compareModelSig = {'type':'Models','items':['A','B','C'],'fixed':[14,5],'optimization':'Polar'}
+# compareNSig = {'type':'N','items':[8,10,12,14],'fixed':[111,5],'optimization':'Polar'}
+# compareMSig = {'type':'M','items':[3,4,5,6,7],'fixed':[111,14],'optimization':'Polar'}
 
 
 
 #plts.plotOvelap_sweeps1(14,1,1,1,[5],approxStatesRand, approxStatesId,GDvsPolar=False)
 #plts.plotOvelap_sweeps1(8, 1, 1, 1, [5], approxStatesP, approxStatesGD,GDvsPolar=True)
-plts.plotOvelap_sweeps2(approxStatesModel, compareModelSig)
-plts.plotOvelap_sweeps2(approxStatesN, compareNSig)
-plts.plotOvelap_sweeps2(approxStatesM, compareMSig)
+# plts.plotOvelap_sweeps2(approxStatesModel, compareModelSig)
+# plts.plotOvelap_sweeps2(approxStatesN, compareNSig)
+# plts.plotOvelap_sweeps2(approxStatesM, compareMSig)
 
 
 

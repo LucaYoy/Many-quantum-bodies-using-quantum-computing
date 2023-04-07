@@ -141,7 +141,7 @@ class BrickWallCircuit:
 			# if (percentageChange < minPerChange and newError<0.1) or cycles > maxCycles or breakFlag:
 			# 	break
 		#print(cycles, percentageChange,stoppingCriteria1Hit,stoppingCriteria2Hit)
-		return self.computeUsingTensorDot(), np.array(overlapArray), criteria1 if 'criteria1' in locals() else None, criteria2 if 'criteria2' in locals() else None
+		return self, np.array(overlapArray), criteria1 if 'criteria1' in locals() else None, criteria2 if 'criteria2' in locals() else None
 
 
 
