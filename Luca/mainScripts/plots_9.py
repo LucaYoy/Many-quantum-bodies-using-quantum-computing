@@ -128,8 +128,8 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 				ax[layers.index(layer),0].plot(criteria2[0],1-criteria2[1],'xg')
 			ax[layers.index(layer),0].set_yscale('log')
 			ax[layers.index(layer),0].set_xscale('log')
-			ax[layers.index(layer),0].set_ylabel('log(1-|Overlap|)')
-			ax[layers.index(layer),0].set_xlabel('log(sweeps)')
+			ax[layers.index(layer),0].set_ylabel('1-|Overlap|',fontsize=10)
+			ax[layers.index(layer),0].set_xlabel('sweeps',fontsize=10)
 
 			overlapArray, criteria1, criteria2 = approx2
 			ax[layers.index(layer),1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
@@ -139,12 +139,12 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 				ax[layers.index(layer),1].plot(criteria2[0],1-criteria2[1],'xg')
 			ax[layers.index(layer),1].set_yscale('log')
 			ax[layers.index(layer),1].set_xscale('log')
-			ax[layers.index(layer),1].set_ylabel('log(1-|Overlap|)')
-			ax[layers.index(layer),1].set_xlabel('log(sweeps)')
+			ax[layers.index(layer),1].set_ylabel('1-|Overlap|',fontsize=10)
+			ax[layers.index(layer),1].set_xlabel('sweeps',fontsize=10)
 
 	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
 	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
-	fig.set_size_inches(12,8)
+	fig.set_size_inches(12,7.4)
 	fig.savefig(f'../plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 	plt.show()
 
@@ -160,15 +160,15 @@ def plotOvelap_sweeps2(approxStates,comapringDict):
 			ax[i].plot(criteria2[0],1-criteria2[1],'xg')
 		ax[i].set_yscale('log')
 		ax[i].set_xscale('log')
-		ax[i].set_ylabel('log(1-|Overlap|)')
-		ax[i].set_xlabel('log(sweeps)')
+		ax[i].set_ylabel('1-|Overlap|',fontsize=10)
+		ax[i].set_xlabel('sweeps',fontsize=10)
 
 	for i in range(len(approxStates)):
 		ax[i].set_title(f"{comapringDict['type']} {comapringDict['items'][i]}")
 
 
+	fig.set_size_inches(12,7.4)
 	plt.show()
-	fig.set_size_inches(16,12)
 	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.pdf",format='pdf',dpi=100)
 
 def plotOvelap_sweeps3(approxState,i=''):
