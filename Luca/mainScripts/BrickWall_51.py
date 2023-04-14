@@ -50,12 +50,12 @@ class BrickWallCircuit:
 		if gatesWithQubitsIndices is None: 
 			gatesWithQubitsIndices = self.gatesWithQubitsIndices(MOriginal)
 
-		res = self.psiIn
-		for gate in gatesWithQubitsIndices:
-			res = self.tensordotPsiWithTwoQubitGate(res,gate)
+		# res = self.psiIn
+		# for gate in gatesWithQubitsIndices:
+		# 	res = self.tensordotPsiWithTwoQubitGate(res,gate)
 
-		return res
-		#return reduce(self.tensordotPsiWithTwoQubitGate,gatesWithQubitsIndices,self.psiIn)
+		# return res
+		return reduce(self.tensordotPsiWithTwoQubitGate,gatesWithQubitsIndices,self.psiIn)
 
 	def removeGate(self ,psiTarget,indexLayer,indexRelativeToLayer):
 		nrGatesTillSplit = int(np.floor(self.N/2)*np.ceil(indexLayer/2)+np.floor((self.N-1)/2)*np.floor(indexLayer/2))

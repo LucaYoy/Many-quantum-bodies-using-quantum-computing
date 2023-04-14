@@ -16,11 +16,11 @@ H = np.array(exactD[0].todense())
 layers = [1,2,3]
 
 #Testing
-circuit = bw.BrickWallCircuit(N,3, gatesRandomFlag=False)
-circuitOpt = circuit.optimize(psiTarget,0.0001,5000,GD=False)[0]
-print(sys.getsizeof(circuit))
-print(sys.getsizeof(circuitOpt.computeUsingTensorDot()))
-print(sys.getsizeof(circuitOpt))
+# circuit = bw.BrickWallCircuit(N,3, gatesRandomFlag=False)
+# circuitOpt = circuit.optimize(psiTarget,0.0001,5000,GD=False)[0]
+# print(sys.getsizeof(circuit))
+# print(sys.getsizeof(circuitOpt.computeUsingTensorDot()))
+# print(sys.getsizeof(circuitOpt))
 #plts.plotOvelap_sweeps3(approxState,'0.5_8_5_5000_GD_Nich')
 
 # plotting correlation functions
@@ -66,37 +66,38 @@ approxStatesId = [approxStatesId]
 approxStatesGD = [approxStatesGD]
 approxStatesP = [approxStatesP]
 
-with open(f'pklFiles/approxStateModel110.pkl','rb') as f:
+with open(f'pklFiles/Comparing/approxStateModel110_Polar.pkl','rb') as f:
 		approxStatesModel.append(pickle.load(f))
-with open(f'pklFiles/approxStateModel11.50.pkl','rb') as f:
+with open(f'pklFiles/Comparing/approxStateModel11.50_Polar.pkl','rb') as f:
 		approxStatesModel.append(pickle.load(f))
-with open(f'pklFiles/approxStateModel111.pkl','rb') as f:
+with open(f'pklFiles/Comparing/approxStateModel111_Polar.pkl','rb') as f:
 		approxStatesModel.append(pickle.load(f))
 	
 for i in [3,4,6,7]:
-	with open(f'pklFiles/approxStateM{i}.pkl','rb') as f:
+	with open(f'pklFiles/Comparing/approxStateM{i}_Polar.pkl','rb') as f:
 		approxStatesM.append(pickle.load(f))
 approxStatesM.insert(2,approxStatesModel[2])
 
-# with open(f'pklFiles/approxStateN8_Polar.pkl','rb') as f:
-# 		approxStatesN.append(pickle.load(f))
-# with open(f'pklFiles/approxStateN10_Polar.pkl','rb') as f:
-# 		approxStatesN.append(pickle.load(f))
-# with open(f'pklFiles/approxStateN12_Polar.pkl','rb') as f:
-# 		approxStatesN.append(pickle.load(f))
-# approxStatesN.append(approxStatesModel[2])
+with open(f'pklFiles/Comparing/approxStateN8_Polar.pkl','rb') as f:
+		approxStatesN.append(pickle.load(f))
+with open(f'pklFiles/Comparing/approxStateN10_Polar.pkl','rb') as f:
+		approxStatesN.append(pickle.load(f))
+with open(f'pklFiles/Comparing/approxStateN12_Polar.pkl','rb') as f:
+		approxStatesN.append(pickle.load(f))
+approxStatesN.append(approxStatesModel[2])
 
 compareModelSig = {'type':'Models','items':['1,1,0','1,1.5,0','1,1,1'],'fixed':[14,5],'optimization':'Polar'}
-# compareNSig = {'type':'N','items':[8,10,12,14],'fixed':[111,5],'optimization':'Polar'}
+compareNSig = {'type':'N','items':[8,10,12,14],'fixed':[111,5],'optimization':'Polar'}
 compareMSig = {'type':'M','items':[3,4,5,6,7],'fixed':[111,14],'optimization':'Polar'}
 
 
 
 #plts.plotOvelap_sweeps1(14,1,1,1,[5],approxStatesRand, approxStatesId,GDvsPolar=False)
 #plts.plotOvelap_sweeps1(14, 1, 1, 1, [5], approxStatesP, approxStatesGD,GDvsPolar=True)
-plts.plotOvelap_sweeps2(approxStatesModel, compareModelSig)
+plts.plotOvelap_sweeps3(approxStatesGD[0][1],'GDOptimization_111_14_5_eta_linear_decrease')
+# plts.plotOvelap_sweeps2(approxStatesModel, compareModelSig)
 # plts.plotOvelap_sweeps2(approxStatesN, compareNSig)
-plts.plotOvelap_sweeps2(approxStatesM, compareMSig)
+# plts.plotOvelap_sweeps2(approxStatesM, compareMSig)
 
 
 

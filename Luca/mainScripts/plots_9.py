@@ -17,6 +17,8 @@ def plotEnergy(psiTarget,j,h,g,approxStates,exactE,H):
 
 	ax.plot(x,E,'o-',label='Approximation')
 	ax.legend()
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	fig.savefig(f'../plots/energyPlot{N}_{j}{h}{g}_{len(approxStates)}.pdf',format='pdf')
 	plt.show()
 
@@ -35,10 +37,12 @@ def plotOvelap(psiTarget,j,h,g,approxStates):
 
 	ax.plot(x,1-np.array(overlap),'o-',label='Approximation')
 	ax.legend()
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	fig.savefig(f'../plots/overlapPlot{N}_{j}{h}{g}_{len(approxStates)}.pdf',format='pdf')
 	plt.show()
 
-def plotS(psiTarget,j,h,g,approxStates,layers):
+def plotS(psiTarget,j,h,g,entropies,layers):
 	N = len(psiTarget.shape)
 	bond = range(N+1)
 	fig, ax = plt.subplots()
@@ -47,12 +51,13 @@ def plotS(psiTarget,j,h,g,approxStates,layers):
 	ax.set_xlabel('i bond')
 	ax.set_ylabel('Entropy')
 
-	for approx,layer in zip(approxStates,layers):
-		enApprox = [en.S(range(1,i+1), approx) for i in bond]
-		ax.plot(bond,enApprox,'o-',label=f'{layer} Layers')
+	for entropyList,layer in zip(entropies,layers):
+		ax.plot(bond,entropyList,'o-',label=f'{layer} Layers')
 
 
 	ax.legend()
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	fig.savefig(f'../plots/entropyPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
@@ -79,6 +84,8 @@ def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
 		axs[layer].set_yticklabels([])
 
 	fig.colorbar(cax,location='left')
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	fig.savefig(f'../plots/matrixCmPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
@@ -92,11 +99,9 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 	if log:
 		ax.set_yscale('log')
 		ax.set_xscale('log')
-		ax.set_xlabel('log(d)')
-		ax.set_ylabel('log(J)')
-	else:
-		ax.set_xlabel('d')
-		ax.set_ylabel('J')
+	
+	ax.set_xlabel('d')
+	ax.set_ylabel('J')
 
 	for approx,layer in zip(approxStates,layers):
 		approxJ = np.array([en.J(dist, approx) for dist in d])
@@ -109,6 +114,8 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 			ax.set_xscale('log')	
 
 	ax.legend()
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	fig.savefig(f'../plots/JPlots{N}_{j}{h}{g}log={log}.pdf',format='pdf')
 	plt.show() 
 
@@ -128,8 +135,6 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 				ax[layers.index(layer),0].plot(criteria2[0],1-criteria2[1],'xg')
 			ax[layers.index(layer),0].set_yscale('log')
 			ax[layers.index(layer),0].set_xscale('log')
-			ax[layers.index(layer),0].set_ylabel('1-|Overlap|',fontsize=10)
-			ax[layers.index(layer),0].set_xlabel('sweeps',fontsize=10)
 
 			overlapArray, criteria1, criteria2 = approx2
 			ax[layers.index(layer),1].plot(range(1,len(overlapArray)+1),1-overlapArray,'-b')
@@ -139,13 +144,14 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 				ax[layers.index(layer),1].plot(criteria2[0],1-criteria2[1],'xg')
 			ax[layers.index(layer),1].set_yscale('log')
 			ax[layers.index(layer),1].set_xscale('log')
-			ax[layers.index(layer),1].set_ylabel('1-|Overlap|',fontsize=10)
-			ax[layers.index(layer),1].set_xlabel('sweeps',fontsize=10)
 
+	ax[0,0].set_ylabel('1-|Overlap|')
+	ax[0,0].set_xlabel('sweeps')
+	plt.rcParams['font.size'] = 10
 	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
 	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
-	fig.set_size_inches(12,7.4)
-	fig.savefig(f'../plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
+	fig.set_size_inches(5.9,3.6)
+	fig.savefig(f'../plots/HPC_plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/HPC_plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 	plt.show()
 
 def plotOvelap_sweeps2(approxStates,comapringDict):
@@ -160,16 +166,16 @@ def plotOvelap_sweeps2(approxStates,comapringDict):
 			ax[i].plot(criteria2[0],1-criteria2[1],'xg')
 		ax[i].set_yscale('log')
 		ax[i].set_xscale('log')
-		ax[i].set_ylabel('1-|Overlap|',fontsize=10)
-		ax[i].set_xlabel('sweeps',fontsize=10)
 
 	for i in range(len(approxStates)):
 		ax[i].set_title(f"{comapringDict['type']} {comapringDict['items'][i]}")
 
-
-	fig.set_size_inches(12,7.4)
+	ax[0].set_ylabel('1-|Overlap|')
+	ax[0].set_xlabel('sweeps')
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.6)
 	plt.show()
-	fig.savefig(f"../plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.pdf",format='pdf',dpi=100)
+	fig.savefig(f"../plots/HPC_plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.pdf",format='pdf',dpi=100)
 
 def plotOvelap_sweeps3(approxState,i=''):
 	fig,ax = plt.subplots()
@@ -182,12 +188,13 @@ def plotOvelap_sweeps3(approxState,i=''):
 		ax.plot(criteria2[0],1-criteria2[1],'xg')
 	ax.set_yscale('log')
 	ax.set_xscale('log')
-	ax.set_ylabel('log(1-|Overlap|)')
-	ax.set_xlabel('log(sweeps)')
+	ax.set_ylabel('1-|Overlap|')
+	ax.set_xlabel('sweeps')
 	
 
+	plt.rcParams['font.size'] = 10
+	fig.set_size_inches(5.9,3.8)
 	plt.show()
-	fig.set_size_inches(16,12)
 	fig.savefig(f'../plots/PlotTesting{i}.pdf',format='pdf',dpi=100)
 
 
