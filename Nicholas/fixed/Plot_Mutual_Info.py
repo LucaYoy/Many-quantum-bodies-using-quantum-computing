@@ -14,13 +14,14 @@ import numpy as np
 Qubits = 8
 J = 1
 H = 1
+G = 0
 
-phi = ed.exactDiagonalization(Qubits, J, H)[1]
+phi = ed.exactDiagonalization(Qubits, J, H, G)[1]
 
 I_matrix, abs_d, sum_I = et.mutual_info_matrix(phi)
 
 for Layers in range(1,4):
-    Circuit = bw.Circuit(Qubits, Layers, J, H)
+    Circuit = bw.Circuit(Qubits, Layers, J, H, G)
     psi = Circuit.optimize_circuit(100, 0.0001, False, False, True)[2]
     
     I_matrix2, abs_d2, sum_I2 = et.mutual_info_matrix(psi)
@@ -33,6 +34,6 @@ plt.yscale("log")
 plt.xlabel('d')
 plt.ylabel('J')
 plt.title('J vs d')
-plt.ylim(10**-5, 10)
+plt.ylim(0.0001, 10)
 plt.legend()
 plt.show()

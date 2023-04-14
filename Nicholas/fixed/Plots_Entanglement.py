@@ -10,11 +10,13 @@ import ExactDiagonalization as ed
 import BrickWall as bw 
 import matplotlib.pyplot as plt
 
-Qubits = 8
+Qubits = 6
 J = 1
-H = 1.5
+H = 1
+G = 1
 
-phi = ed.exactDiagonalization(Qubits, J, H)[1]
+#phi = ed.exactDiagonalization(Qubits, J, H, G)[1]
+phi = ed.exactDiagSparse(Qubits, J, H, G)[1]
 
 entropies_exact = []
 
@@ -26,11 +28,11 @@ for i in range(0, len(phi.shape)+1):
     
 for Layers in range(1,4):
     entropies = []
-    Circuit = bw.Circuit(Qubits, Layers, J, H)
-    psi=Circuit.optimize_circuit(100,10**-12, True, True, True)[2]
+    Circuit = bw.Circuit(Qubits, Layers, J, H, G, gatesrandom=False)
+    psi=Circuit.optimize_circuit(100,10**-4, True, True, True, False)[2]
     
     for i in range(0, len(psi.shape)+1):
-        entropy = et.compute_entropy(list(range(i)), psi)
+        entropy = et.compute_entropy((range(i)), psi)
         entropies.append(entropy)
     
     plt.plot(range(0, len(psi.shape)+1), entropies, "-o", label=f"{Layers} Layers")
@@ -40,6 +42,3 @@ plt.xlabel('Qubit')
 plt.ylabel('Entropy')
 plt.legend()
 plt.show()
-
-pli = phi.flatten()
-poi = psi.flatten()
