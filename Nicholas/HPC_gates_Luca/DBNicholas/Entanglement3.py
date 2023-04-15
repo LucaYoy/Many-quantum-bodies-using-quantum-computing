@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 12 16:58:40 2023
-
-@author: msyne
-"""
-
 import numpy as np
+
 
 def compute_entropy(A,psi):
     # Find number of qubits
@@ -27,7 +21,7 @@ def compute_entropy(A,psi):
     entropy = -np.sum(eigenvalues * np.log(eigenvalues))
     
     return entropy
-    
+
     
 def compute_I(A,B,psi):
     
@@ -47,11 +41,14 @@ def compute_J(d, psi):
                 sum += compute_I([i], [j], psi)
     return sum/2
 
+def J(d, psi):
+    N = len(psi.shape)
+    return np.sum([compute_I([i],[j],psi) for i in range(1,N+1) for j in range(1,N+1) if abs(i-j)==d])/2
 
 def mutual_info_matrix(psi):
     n = len(psi.shape)
     I_matrix = np.zeros((n, n))
-    abs_d = np.arange(1, n)
+    abs_d = np.arange(1, n+1)
     sum_I = np.zeros_like(abs_d, dtype=float)
 
     for A in range(n):

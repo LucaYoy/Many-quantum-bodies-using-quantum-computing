@@ -3,19 +3,19 @@ import Entanglement3 as et
 import matplotlib.pyplot as plt
 import ExactDiagonalization as ed
 
-Qubits = 8
+Qubits = 14
 J = 1
-h = 1.5
+h = 1
 G = 0
 
 phi = ed.exactDiagSparse(Qubits, J, h, G)[1]
 
 matrix_phi,_,_ = et.mutual_info_matrix(phi)
 
-fig, axs = plt.subplots(1, 6, figsize=(12,2), sharey=True)
-fig.suptitle("Mutual Information Matrix")
-fig.text(0.5, 0.01, 'Qubits', ha='center', va='center')
-axs[0].set_ylabel('Qubit')
+fig, axs = plt.subplots(1, 6, figsize=(12,3), sharey=True)
+fig.suptitle(f"{Qubits} Qubits, J={J}, h={h}, G={G}")
+fig.text(0.5, 0.1, 'Qubits', ha='center', va='center')
+axs[0].set_ylabel('Qubits')
 
 axs[0].set_xticks([0,Qubits-1])
 axs[0].set_yticks([0, Qubits-1])
@@ -49,5 +49,21 @@ for i, matrix in enumerate(all_matrices):
 fig.subplots_adjust(right=0.8)
 cbar_ax = fig.add_axes([0.85, 0.10, 0.05, 0.7])
 fig.colorbar(im1, cax=cbar_ax)
+
+title = f"{Qubits} Qubits, J={J}, h={h}, G={G}"
+
+import os
+
+if not os.path.exists(f"Plots/{title}.png"):
+    plt.savefig(f"Plots/{title}.png") 
+
    
 plt.show()
+
+
+
+
+
+
+
+

@@ -36,6 +36,7 @@ from scipy.sparse.linalg import eigsh
 def exactDiagSparse(n,j,h,G):
 
     H = sp.csc_matrix((2**n,2**n))
+    #H = np.zeros((2**n, 2**n))
 
     for i in range(1,n):
         
@@ -50,15 +51,16 @@ def exactDiagSparse(n,j,h,G):
         H += G * sp.kron(sp.eye(2**(i-1)), sp.kron(g.X, sp.eye(2**(n-i))))
 
     E, V = eigsh(H, k=1, which='SA')  # we only need the lowest eigenvalue / eigenvector
-
+    
+    
     return E[0],V[:,0].reshape(tuple([2]*n)), H
 
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
 
     #p = exactDiagonalization(4, 1, 1, 1)
     
-    #q = exactDiagSparse(4, 1, 1, 1)
+    q = exactDiagSparse(4, 1, 1, 1)
     
     
     

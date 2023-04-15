@@ -2,7 +2,7 @@ import pickle
 
 Qubits = 8
 J = 1
-h = 1.5
+h = 1
 G = 0
 
 all_gates = []
