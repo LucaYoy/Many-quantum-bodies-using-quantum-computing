@@ -35,7 +35,8 @@ from scipy.sparse.linalg import eigsh
 
 def exactDiagSparse(n,j,h,G):
 
-    H = sp.csc_matrix((2**n,2**n))
+    #H = sp.csc_matrix((2**n,2**n))
+    H = np.zeros((2**n,2**n))
 
     for i in range(1,n):
         
