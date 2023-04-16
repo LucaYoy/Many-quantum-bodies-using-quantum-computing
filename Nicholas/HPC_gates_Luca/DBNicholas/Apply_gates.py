@@ -1,9 +1,9 @@
 import pickle
 
-Qubits = 8
+Qubits = 14
 J = 1
 h = 1
-G = 0
+G = 1
 
 all_gates = []
 for Layers in range(3,8):

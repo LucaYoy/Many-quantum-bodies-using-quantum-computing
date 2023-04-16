@@ -6,7 +6,7 @@ import ExactDiagonalization as ed
 Qubits = 14
 J = 1
 h = 1
-G = 0
+G = 1
 
 phi = ed.exactDiagSparse(Qubits, J, h, G)[1]
 

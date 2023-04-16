@@ -5,8 +5,8 @@ import ExactDiagonalization as ed
 
 Qubits = 14
 J = 1
-h = 1.5
-G = 0
+h = 1
+G = 1
 
 phi = ed.exactDiagSparse(Qubits, J, h, G)[1]
 
@@ -33,7 +33,7 @@ plt.xlabel('d')
 plt.ylabel('J')
 plt.title(f'{Qubits} Qubits, J={J}, h={h}, G={G}')
 plt.xticks(range(1,8, 1))
-plt.ylim(10**-6, 10)
+plt.ylim(0, 10)
 plt.legend()
 
 title = f'{Qubits} Qubits, J={J}, h={h}, G={G} mutual info'

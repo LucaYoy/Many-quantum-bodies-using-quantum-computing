@@ -4,10 +4,10 @@ import Apply_gates as g
 import time 
 start_time = time.time()
 
-Qubits = 8
+Qubits = 12
 J = 1
 h = 1
-G = 0
+G = 1
 
 # Generate psi
 p = 3
