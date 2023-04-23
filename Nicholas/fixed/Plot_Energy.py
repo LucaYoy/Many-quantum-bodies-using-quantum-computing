@@ -13,19 +13,21 @@ import numpy as np
 Qubits = 8
 J = 1
 h = 1.5
+G = 0
 Layers = 10
 
-phi = ed.exactDiagonalization(Qubits, J, h)
+phi = ed.exactDiagonalization(Qubits, J, h, G)
 exact_energy,_,_ = phi 
 _,_,H = phi
 Evalues = []
 
-for i in range(1, Layers+1):
-    Circuit = bw.Circuit(Qubits, i, J, h)
+for i in range(1, 5):
+    Circuit = bw.Circuit(Qubits, i, J, h, G)
     psi = Circuit.optimize_circuit(100, 0.000001, False, True, True)[2]
     psi = psi.flatten()
     E = np.vdot(psi, np.matmul(H, psi.conj()))
-    print(E)
+    print(psi.shape)
+    print(H.shape)
     Evalues.append(E)
     
 plt.plot(range(i), Evalues, "-o", label="Approximation")
