@@ -2,24 +2,19 @@ import numpy as np
 import Entropy as en
 import matplotlib.pyplot as plt
 
-def plotEnergy(psiTarget,j,h,g,approxStates,exactE,H):
+def plotEnergy(psiTarget,j,h,g,exactE,EList,layers,H):
 	N = len(psiTarget.shape)
 	fig, ax = plt.subplots()
-	x = range(1,len(approxStates)+1)
-	ax.plot([1,len(approxStates)],[exactE,exactE],'--k',label='Exact')
+	x = layers
+	ax.plot([x[0],x[-1]],[exactE,exactE],'--k',label='Exact')
 	ax.set_xlabel('Layers')
 	ax.set_ylabel('Energy')
-	E = []
 
-	for approx in approxStates:
-		approx = approx.flatten()
-		E.append(np.vdot(approx,np.matmul(H,approx)))
-
-	ax.plot(x,E,'o-',label='Approximation')
+	ax.plot(x,EList,'o-',label='Approximation')
 	ax.legend()
 	plt.rcParams['font.size'] = 10
 	fig.set_size_inches(5.9,3.6)
-	fig.savefig(f'../plots/energyPlot{N}_{j}{h}{g}_{len(approxStates)}.pdf',format='pdf')
+	fig.savefig(f'../plots/energyPlot{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
 def plotOvelap(psiTarget,j,h,g,approxStates):
