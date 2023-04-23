@@ -4,9 +4,15 @@ def S(A,psiTarget):
 	nrQubits = len(psiTarget.shape)
 	n = len(A)
 
-	qubitsToContract = list(set(range(nrQubits)) - set(np.array(A)-1))
+	if n>nrQubits//2:
+		qubitsToContract = np.array(A)-1
+		freeLegs = nrQubits-n
+	else:
+		qubitsToContract = list(set(range(nrQubits)) - set(np.array(A)-1))
+		freeLegs = n
+
 	rhoA = np.tensordot(psiTarget, np.conjugate(psiTarget), (qubitsToContract,qubitsToContract)) #partial state
-	eigenvalues = np.linalg.eigh(rhoA.reshape((2**n,2**n)))[0] #eigenvalues of partial state
+	eigenvalues = np.linalg.eigh(rhoA.reshape((2**freeLegs,2**freeLegs)))[0] #eigenvalues of partial state
 	eigenvalues = [eigenvalue for eigenvalue in eigenvalues if eigenvalue>10**(-12)]
 	entropy = -np.sum(eigenvalues*np.log(eigenvalues))
 

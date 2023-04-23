@@ -154,7 +154,7 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 	fig.savefig(f'../plots/HPC_plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/HPC_plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 	plt.show()
 
-def plotOvelap_sweeps2(approxStates,comapringDict):
+def plotOvelap_sweeps2(approxStates,comapringDict,i=''):
 	fig, ax = plt.subplots(1,len(approxStates),layout='constrained')
 
 	for i in range(len(approxStates)):
@@ -168,14 +168,14 @@ def plotOvelap_sweeps2(approxStates,comapringDict):
 		ax[i].set_xscale('log')
 
 	for i in range(len(approxStates)):
-		ax[i].set_title(f"{comapringDict['type']} {comapringDict['items'][i]}")
+		ax[i].set_title(f"{comapringDict['type']} = {comapringDict['items'][i]}")
 
 	ax[0].set_ylabel('1-|Overlap|')
 	ax[0].set_xlabel('sweeps')
 	plt.rcParams['font.size'] = 10
 	fig.set_size_inches(5.9,3.6)
 	plt.show()
-	fig.savefig(f"../plots/HPC_plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}.pdf",format='pdf',dpi=100)
+	fig.savefig(f"../plots/HPC_plots/Compare{comapringDict['type']}Using{comapringDict['optimization']}optimizationWithFixed_{comapringDict['fixed'][0]}_{comapringDict['fixed'][1]}{i}.pdf",format='pdf',dpi=100)
 
 def plotOvelap_sweeps3(approxState,i=''):
 	fig,ax = plt.subplots()
