@@ -56,9 +56,9 @@ def plotS(psiTarget,j,h,g,entropies,layers):
 	fig.savefig(f'../plots/entropyPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
-def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
+def plotMatrixI(psiTarget,j,h,g,Imatrices,layers):
 	N = len(psiTarget.shape)
-	fig , axs = plt.subplots(1,len(approxStates)+1,layout='constrained')
+	fig , axs = plt.subplots(1,len(layers)+1,layout='constrained')
 	alpha = ['']+list(range(1,N+1))
 
 	exact = en.matrixI(psiTarget)
@@ -70,13 +70,11 @@ def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
 	axs[0].set_yticklabels(alpha)
 	axs[0].set_title(f'Exact', weight='bold')
 
-	for approx,layer in zip(approxStates,layers):
-		matrixApprox = en.matrixI(approx) 
-
-		axs[layer].matshow(matrixApprox,cmap=plt.cm.Oranges)
-		axs[layer].set_title(f'Layers: {layer}', weight='bold')
-		axs[layer].set_xticklabels([])
-		axs[layer].set_yticklabels([])
+	for i in range(len(layers)): 
+		axs[i+1].matshow(Imatrices[i],cmap=plt.cm.Oranges)
+		axs[i+1].set_title(f'Layers: {layers[i]}', weight='bold')
+		axs[i+1].set_xticklabels([])
+		axs[i+1].set_yticklabels([])
 
 	fig.colorbar(cax,location='left')
 	plt.rcParams['font.size'] = 10
@@ -84,7 +82,7 @@ def plotMatrixI(psiTarget,j,h,g,approxStates,layers):
 	fig.savefig(f'../plots/matrixCmPlots{N}_{j}{h}{g}.pdf',format='pdf')
 	plt.show()
 
-def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
+def plotJ(psiTarget,j,h,g,Js,layers,log=False):
 	N = len(psiTarget.shape)
 	fig, ax  = plt.subplots()
 	d = np.array(range(1,N))
@@ -98,12 +96,11 @@ def plotJ(psiTarget,j,h,g,approxStates,layers,log=False):
 	ax.set_xlabel('d')
 	ax.set_ylabel('J')
 
-	for approx,layer in zip(approxStates,layers):
-		approxJ = np.array([en.J(dist, approx) for dist in d])
+	for Jlist,layer in zip(Js,layers):
 		if log:
-			approxJ[np.abs(approxJ)<10**-12] = None
-		print(approxJ)
-		ax.plot(d,approxJ,'o-',label=f'Layers: {layer}')
+			Jlist[np.abs(Jlist)<10**-12] = None
+		# print(approxJ)
+		ax.plot(d,Jlist,'o-',label=f'Layers: {layer}')
 		if log:
 			ax.set_yscale('log')
 			ax.set_xscale('log')	
@@ -146,8 +143,8 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 	ax[0,0].set_title('Polar method' if GDvsPolar else 'Random gates initialized')
 	ax[0,1].set_title('Gradient descent method' if GDvsPolar else 'Close to Id gates initialized')
 	fig.set_size_inches(5.9,3.6)
-	fig.savefig(f'../plots/HPC_plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/HPC_plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 	plt.show()
+	fig.savefig(f'../plots/HPC_plots/GDvsPolar{N}_{j}{h}{g}.pdf' if GDvsPolar else f'../plots/HPC_plots/RandomVScloseToId{N}_{j}{h}{g}.pdf',format='pdf',dpi=100)
 
 def plotOvelap_sweeps2(approxStates,comapringDict,i=''):
 	fig, ax = plt.subplots(1,len(approxStates),layout='constrained')
@@ -161,10 +158,13 @@ def plotOvelap_sweeps2(approxStates,comapringDict,i=''):
 			ax[i].plot(criteria2[0],1-criteria2[1],'xg')
 		ax[i].set_yscale('log')
 		ax[i].set_xscale('log')
+		ax[i].set_xticks([10**0,10**3,10**5])
 
 	for i in range(len(approxStates)):
 		ax[i].set_title(f"{comapringDict['type']} = {comapringDict['items'][i]}")
 
+	ax[0].set_yticks([0.1,0.03])
+	ax[0].set_yticklabels([0.1,0.03])
 	ax[0].set_ylabel('1-|Overlap|')
 	ax[0].set_xlabel('sweeps')
 	plt.rcParams['font.size'] = 10
