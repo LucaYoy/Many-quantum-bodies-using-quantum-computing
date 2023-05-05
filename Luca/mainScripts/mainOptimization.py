@@ -62,13 +62,13 @@ for i in range(1,11):
 		approxStatesGD14.append(pickle.load(f))
 	with open(f'pklFiles/testingOpt/approxStatePolar8{i}.pkl','rb') as f:
 		approxStatesP8.append(pickle.load(f))
-	with open(f'pklFiles/testingOpt/approxStateGD8_eta_linear_decrease{i}.pkl','rb') as f:
+	with open(f'pklFiles/testingOpt/approxStateGD8_eta_Nich{i}.pkl','rb') as f:
 		approxStatesGD8.append(pickle.load(f))
 	
 approxStatesRand = [approxStatesRand]
 approxStatesId = [approxStatesId]
-approxStatesGD = [approxStatesGD14,approxStatesGD8]
-approxStatesP = [approxStatesP14,approxStatesP8]
+approxStatesGD = [approxStatesGD8]
+approxStatesP = [approxStatesP8]
 
 with open(f'pklFiles/Comparing/approxStateModel110_Polar.pkl','rb') as f:
 		approxStatesModel.append(pickle.load(f))
@@ -97,11 +97,11 @@ compareMSig1 = {'type':'M','items':[3,5,7],'fixed':[111,14],'optimization':'Pola
 
 
 #plts.plotOvelap_sweeps1(14,1,1,1,[5],approxStatesRand, approxStatesId,GDvsPolar=False)
-#plts.plotOvelap_sweeps1('8&14', 1, 1, 1, [5,6], approxStatesP, approxStatesGD,GDvsPolar=True)
+#plts.plotOvelap_sweeps1('8', 1, 1, 1, [5], approxStatesP, approxStatesGD,GDvsPolar=True)
 #plts.plotOvelap_sweeps3(approxStatesGD[0][1],'GDOptimization_111_14_5_eta_linear_decrease')
 plts.plotOvelap_sweeps2(approxStatesModel, compareModelSig)
 #plts.plotOvelap_sweeps2(approxStatesN, compareNSig)
-#plts.plotOvelap_sweeps2(approxStatesM[::2], compareMSig1)
+#plts.plotOvelap_sweeps2(approxStatesM[::2], compareMSig1,i='_110')
 
 
 

@@ -137,6 +137,9 @@ def plotOvelap_sweeps1(N,j,h,g,layers,approxStates1,approxStates2,GDvsPolar=Fals
 			ax[layers.index(layer),1].set_yscale('log')
 			ax[layers.index(layer),1].set_xscale('log')
 
+	
+	ax[0,0].set_xticks([10**0,10**2,10**4])
+	ax[0,1].set_xticks([10**0,10**2,10**4])
 	ax[0,0].set_ylabel('1-|Overlap|')
 	ax[0,0].set_xlabel('sweeps')
 	plt.rcParams['font.size'] = 10
@@ -162,8 +165,9 @@ def plotOvelap_sweeps2(approxStates,comapringDict,i=''):
 
 	for i in range(len(approxStates)):
 		ax[i].set_title(f"{comapringDict['type']} = {comapringDict['items'][i]}")
+		ax[i].set_xticks([10**1,10**3,10**5])
 
-	ax[0].set_yticks([0.1,0.03])
+	ax[0].set_yticks([10**-1,0.03])
 	ax[0].set_yticklabels([0.1,0.03])
 	ax[0].set_ylabel('1-|Overlap|')
 	ax[0].set_xlabel('sweeps')
